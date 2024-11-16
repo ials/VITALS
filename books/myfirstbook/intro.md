@@ -1,6 +1,8 @@
 # Welcome to PRA
 
-This is the first Python notebook in the *Percepción Remota Avanzada* course.
+## Ivan Lizarazo - 15.11.2024
+
+You can find here several Python notebooks for the *Percepción Remota Avanzada* course.
 
 ```{tableofcontents}
 ```
