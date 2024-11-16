@@ -6,3 +6,4 @@ root: intro
 chapters:
 - file: notebooks
 - file: Panel_02A
+- file: Floods
