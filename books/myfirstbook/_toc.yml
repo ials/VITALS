@@ -4,7 +4,6 @@
 format: jb-book
 root: intro
 chapters:
-- file: notebooks
-- file: Panel_01
+- file: Panel_01A
 - file: Panel_02A
 - file: 01_Finding_Concurrent_Data

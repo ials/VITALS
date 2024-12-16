@@ -18,34 +18,24 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-# Import required libraries
-import os
-import folium
-import earthaccess
-import warnings
-import folium.plugins
+import holoviews as hv
+import hvplot.pandas
+import numpy as np
 import pandas as pd
-import geopandas as gpd
-import math
+import panel as pn
 
-from branca.element import Figure
-from IPython.display import display
-from shapely import geometry
-from skimage import io
-from datetime import timedelta
-from shapely.geometry.polygon import orient
-from matplotlib import pyplot as plt
+PRIMARY_COLOR = "#0072B5"
+SECONDARY_COLOR = "#B54300"
+TERCIARY_COLOR = "#50C878" 
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
-Cell [0;32mIn[1], line 4[0m
-[1;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mos[39;00m
-[1;32m      3[0m [38;5;28;01mimport[39;00m [38;5;21;01mfolium[39;00m
-[0;32m----> 4[0m [38;5;28;01mimport[39;00m [38;5;21;01mearthaccess[39;00m
-[1;32m      5[0m [38;5;28;01mimport[39;00m [38;5;21;01mwarnings[39;00m
-[1;32m      6[0m [38;5;28;01mimport[39;00m [38;5;21;01mfolium[39;00m[38;5;21;01m.[39;00m[38;5;21;01mplugins[39;00m
+Cell [0;32mIn[1], line 1[0m
+[0;32m----> 1[0m [38;5;28;01mimport[39;00m [38;5;21;01mholoviews[39;00m [38;5;28;01mas[39;00m [38;5;21;01mhv[39;00m
+[1;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mhvplot[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpandas[39;00m
+[1;32m      3[0m [38;5;28;01mimport[39;00m [38;5;21;01mnumpy[39;00m [38;5;28;01mas[39;00m [38;5;21;01mnp[39;00m
 
-[0;31mModuleNotFoundError[0m: No module named 'earthaccess'
+[0;31mModuleNotFoundError[0m: No module named 'holoviews'
 

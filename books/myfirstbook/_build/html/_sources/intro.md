@@ -1,6 +1,6 @@
 # Welcome to PRA
 
-## Ivan Lizarazo - 15.11.2024
+## Ivan Lizarazo - Updated on 16.12.2024
 
 You can find here several Python notebooks for the *Percepción Remota Avanzada* course.
 
