@@ -1,0 +1,2192 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Hyperspectral data exploration - Water &#8212; Hyperspectral notebook 1</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Panel_01A';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Visualizing hyperspectral signatures of agricultural crops" href="Panel_02A.html" />
+    <link rel="prev" title="Welcome to PRA" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Hyperspectral notebook 1 - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Hyperspectral notebook 1 - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to PRA
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Hyperspectral data exploration - Water</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Panel_02A.html">Visualizing hyperspectral signatures of agricultural crops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_Finding_Concurrent_Data.html">1 Finding Concurrent ECOSTRESS and EMIT Data</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FPanel_01A.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Panel_01A.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Hyperspectral data exploration - Water</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#i-l-21-10-2024">I.L. 21.10.2024</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goal">Goal</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tools">Tools</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fetching-the-data">Fetching the data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gloria">GLORIA</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-the-metadata">Checking the metadata</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#total-suspended-solids-tss">Total Suspended Solids (TSS)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-a-subset-of-the-data">Visualizing a Subset of the Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exploring-the-parameter-space">Exploring the Parameter Space</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-serving-the-notebook">Optional - Serving the Notebook</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="hyperspectral-data-exploration-water">
+<h1>Hyperspectral data exploration - Water<a class="headerlink" href="#hyperspectral-data-exploration-water" title="Link to this heading">#</a></h1>
+<section id="i-l-21-10-2024">
+<h2>I.L. 21.10.2024<a class="headerlink" href="#i-l-21-10-2024" title="Link to this heading">#</a></h2>
+</section>
+<section id="goal">
+<h2>Goal<a class="headerlink" href="#goal" title="Link to this heading">#</a></h2>
+<p>In this notebook, we’ll walk through creating a basic interactive application using NumPy, Pandas, and hvPlot. If you haven’t installed hvPlot yet, you can do so with pip install hvplot or conda install -c conda-forge hvplot.</p>
+<p>Let’s envision what our app will look like:</p>
+<p><img alt="" src="_images/GLORIA_plot.png" /></p>
+</section>
+<section id="tools">
+<h2>Tools<a class="headerlink" href="#tools" title="Link to this heading">#</a></h2>
+<p>We will using <a class="reference external" href="https://panel.holoviz.org/index.html"><em>Panel</em></a>, a Python library designed to streamline the development of robust tools, dashboards, and complex applications. Panel integrates seamlessly with the PyData ecosystem, offering powerful, interactive data tables, visualizations, and much more, to unlock, visualize, share, and collaborate on your data for efficient workflows.</p>
+<p>Panel is a component of the <a class="reference external" href="https://holoviz.org/"><em>HoloViz</em></a> ecosystem, providing a gateway to a cohesive suite of data exploration tools.</p>
+<section id="fetching-the-data">
+<h3>Fetching the data<a class="headerlink" href="#fetching-the-data" title="Link to this heading">#</a></h3>
+<p>First, let’s import the necessary dependencies and define some variables:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">holoviews</span> <span class="k">as</span> <span class="nn">hv</span>
+<span class="kn">import</span> <span class="nn">hvplot.pandas</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">panel</span> <span class="k">as</span> <span class="nn">pn</span>
+
+<span class="n">PRIMARY_COLOR</span> <span class="o">=</span> <span class="s2">&quot;#0072B5&quot;</span>
+<span class="n">SECONDARY_COLOR</span> <span class="o">=</span> <span class="s2">&quot;#B54300&quot;</span>
+<span class="n">TERCIARY_COLOR</span> <span class="o">=</span> <span class="s2">&quot;#50C878&quot;</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">holoviews</span> <span class="k">as</span> <span class="nn">hv</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">hvplot.pandas</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;holoviews&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, we’ll import the Panel JavaScript dependencies using pn.extension(…). For a visually appealing and responsive user experience, we’ll set the design to “material” and the sizing_mode to stretch_width:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pn</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="n">design</span><span class="o">=</span><span class="s2">&quot;material&quot;</span><span class="p">,</span> <span class="n">sizing_mode</span><span class="o">=</span><span class="s2">&quot;stretch_width&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><script type="esms-options">{"shimMode": true}</script><style>*[data-root-id],
+*[data-root-id] > * {
+  box-sizing: border-box;
+  font-family: var(--jp-ui-font-family);
+  font-size: var(--jp-ui-font-size1);
+  color: var(--vscode-editor-foreground, var(--jp-ui-font-color1));
+}
+
+/* Override VSCode background color */
+.cell-output-ipywidget-background:has(
+    > .cell-output-ipywidget-background > .lm-Widget > *[data-root-id]
+  ),
+.cell-output-ipywidget-background:has(> .lm-Widget > *[data-root-id]) {
+  background-color: transparent !important;
+}
+</style></div><script type="application/javascript">(function(root) {
+  function now() {
+    return new Date();
+  }
+
+  const force = false;
+  const py_version = '3.5.2'.replace('rc', '-rc.').replace('.dev', '-dev.');
+  const reloading = true;
+  const Bokeh = root.Bokeh;
+
+  // Set a timeout for this load but only if we are not already initializing
+  if (typeof (root._bokeh_timeout) === "undefined" || (force || !root._bokeh_is_initializing)) {
+    root._bokeh_timeout = Date.now() + 5000;
+    root._bokeh_failed_load = false;
+  }
+
+  function run_callbacks() {
+    try {
+      root._bokeh_onload_callbacks.forEach(function(callback) {
+        if (callback != null)
+          callback();
+      });
+    } finally {
+      delete root._bokeh_onload_callbacks;
+    }
+    console.debug("Bokeh: all callbacks have finished");
+  }
+
+  function load_libs(css_urls, js_urls, js_modules, js_exports, callback) {
+    if (css_urls == null) css_urls = [];
+    if (js_urls == null) js_urls = [];
+    if (js_modules == null) js_modules = [];
+    if (js_exports == null) js_exports = {};
+
+    root._bokeh_onload_callbacks.push(callback);
+
+    if (root._bokeh_is_loading > 0) {
+      // Don't load bokeh if it is still initializing
+      console.debug("Bokeh: BokehJS is being loaded, scheduling callback at", now());
+      return null;
+    } else if (js_urls.length === 0 && js_modules.length === 0 && Object.keys(js_exports).length === 0) {
+      // There is nothing to load
+      run_callbacks();
+      return null;
+    }
+
+    function on_load() {
+      root._bokeh_is_loading--;
+      if (root._bokeh_is_loading === 0) {
+        console.debug("Bokeh: all BokehJS libraries/stylesheets loaded");
+        run_callbacks()
+      }
+    }
+    window._bokeh_on_load = on_load
+
+    function on_error(e) {
+      const src_el = e.srcElement
+      console.error("failed to load " + (src_el.href || src_el.src));
+    }
+
+    const skip = [];
+    if (window.requirejs) {
+      window.requirejs.config({'packages': {}, 'paths': {}, 'shim': {}});
+      root._bokeh_is_loading = css_urls.length + 0;
+    } else {
+      root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length + Object.keys(js_exports).length;
+    }
+
+    const existing_stylesheets = []
+    const links = document.getElementsByTagName('link')
+    for (let i = 0; i < links.length; i++) {
+      const link = links[i]
+      if (link.href != null) {
+        existing_stylesheets.push(link.href)
+      }
+    }
+    for (let i = 0; i < css_urls.length; i++) {
+      const url = css_urls[i];
+      const escaped = encodeURI(url)
+      if (existing_stylesheets.indexOf(escaped) !== -1) {
+        on_load()
+        continue;
+      }
+      const element = document.createElement("link");
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.rel = "stylesheet";
+      element.type = "text/css";
+      element.href = url;
+      console.debug("Bokeh: injecting link tag for BokehJS stylesheet: ", url);
+      document.body.appendChild(element);
+    }    var existing_scripts = []
+    const scripts = document.getElementsByTagName('script')
+    for (let i = 0; i < scripts.length; i++) {
+      var script = scripts[i]
+      if (script.src != null) {
+        existing_scripts.push(script.src)
+      }
+    }
+    for (let i = 0; i < js_urls.length; i++) {
+      const url = js_urls[i];
+      const escaped = encodeURI(url)
+      if (skip.indexOf(escaped) !== -1 || existing_scripts.indexOf(escaped) !== -1) {
+        if (!window.requirejs) {
+          on_load();
+        }
+        continue;
+      }
+      const element = document.createElement('script');
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.async = false;
+      element.src = url;
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      document.head.appendChild(element);
+    }
+    for (let i = 0; i < js_modules.length; i++) {
+      const url = js_modules[i];
+      const escaped = encodeURI(url)
+      if (skip.indexOf(escaped) !== -1 || existing_scripts.indexOf(escaped) !== -1) {
+        if (!window.requirejs) {
+          on_load();
+        }
+        continue;
+      }
+      var element = document.createElement('script');
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.async = false;
+      element.src = url;
+      element.type = "module";
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      document.head.appendChild(element);
+    }
+    for (const name in js_exports) {
+      const url = js_exports[name];
+      const escaped = encodeURI(url)
+      if (skip.indexOf(escaped) >= 0 || root[name] != null) {
+        if (!window.requirejs) {
+          on_load();
+        }
+        continue;
+      }
+      var element = document.createElement('script');
+      element.onerror = on_error;
+      element.async = false;
+      element.type = "module";
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      element.textContent = `
+      import ${name} from "${url}"
+      window.${name} = ${name}
+      window._bokeh_on_load()
+      `
+      document.head.appendChild(element);
+    }
+    if (!js_urls.length && !js_modules.length) {
+      on_load()
+    }
+  };
+
+  function inject_raw_css(css) {
+    const element = document.createElement("style");
+    element.appendChild(document.createTextNode(css));
+    document.body.appendChild(element);
+  }
+
+  const js_urls = ["https://cdn.holoviz.org/panel/1.5.2/dist/bundled/reactiveesm/es-module-shims@^1.10.0/dist/es-module-shims.min.js", "https://cdn.holoviz.org/panel/1.5.2/dist/bundled/material-components-web@7.0.0/dist/material-components-web.min.js"];
+  const js_modules = [];
+  const js_exports = {};
+  const css_urls = ["https://fonts.googleapis.com/css?family=Roboto:300,400,500", "https://fonts.googleapis.com/css?family=Material+Icons&display=block"];
+  const inline_js = [    function(Bokeh) {
+      Bokeh.set_log_level("info");
+    },
+function(Bokeh) {} // ensure no trailing comma for IE
+  ];
+
+  function run_inline_js() {
+    if ((root.Bokeh !== undefined) || (force === true)) {
+      for (let i = 0; i < inline_js.length; i++) {
+        try {
+          inline_js[i].call(root, root.Bokeh);
+        } catch(e) {
+          if (!reloading) {
+            throw e;
+          }
+        }
+      }
+      // Cache old bokeh versions
+      if (Bokeh != undefined && !reloading) {
+        var NewBokeh = root.Bokeh;
+        if (Bokeh.versions === undefined) {
+          Bokeh.versions = new Map();
+        }
+        if (NewBokeh.version !== Bokeh.version) {
+          Bokeh.versions.set(NewBokeh.version, NewBokeh)
+        }
+        root.Bokeh = Bokeh;
+      }
+    } else if (Date.now() < root._bokeh_timeout) {
+      setTimeout(run_inline_js, 100);
+    } else if (!root._bokeh_failed_load) {
+      console.log("Bokeh: BokehJS failed to load within specified timeout.");
+      root._bokeh_failed_load = true;
+    }
+    root._bokeh_is_initializing = false
+  }
+
+  function load_or_wait() {
+    // Implement a backoff loop that tries to ensure we do not load multiple
+    // versions of Bokeh and its dependencies at the same time.
+    // In recent versions we use the root._bokeh_is_initializing flag
+    // to determine whether there is an ongoing attempt to initialize
+    // bokeh, however for backward compatibility we also try to ensure
+    // that we do not start loading a newer (Panel>=1.0 and Bokeh>3) version
+    // before older versions are fully initialized.
+    if (root._bokeh_is_initializing && Date.now() > root._bokeh_timeout) {
+      // If the timeout and bokeh was not successfully loaded we reset
+      // everything and try loading again
+      root._bokeh_timeout = Date.now() + 5000;
+      root._bokeh_is_initializing = false;
+      root._bokeh_onload_callbacks = undefined;
+      root._bokeh_is_loading = 0
+      console.log("Bokeh: BokehJS was loaded multiple times but one version failed to initialize.");
+      load_or_wait();
+    } else if (root._bokeh_is_initializing || (typeof root._bokeh_is_initializing === "undefined" && root._bokeh_onload_callbacks !== undefined)) {
+      setTimeout(load_or_wait, 100);
+    } else {
+      root._bokeh_is_initializing = true
+      root._bokeh_onload_callbacks = []
+      const bokeh_loaded = root.Bokeh != null && (root.Bokeh.version === py_version || (root.Bokeh.versions !== undefined && root.Bokeh.versions.has(py_version)));
+      if (!reloading && !bokeh_loaded) {
+        if (root.Bokeh) {
+          root.Bokeh = undefined;
+        }
+        console.debug("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
+      }
+      load_libs(css_urls, js_urls, js_modules, js_exports, function() {
+        console.debug("Bokeh: BokehJS plotting callback run at", now());
+        run_inline_js();
+      });
+    }
+  }
+  // Give older versions of the autoload script a head-start to ensure
+  // they initialize before we start loading newer version.
+  setTimeout(load_or_wait, 100)
+}(window));</script><script type="application/javascript">
+if ((window.PyViz === undefined) || (window.PyViz instanceof HTMLElement)) {
+  window.PyViz = {comms: {}, comm_status:{}, kernels:{}, receivers: {}, plot_index: []}
+}
+
+
+    function JupyterCommManager() {
+    }
+
+    JupyterCommManager.prototype.register_target = function(plot_id, comm_id, msg_handler) {
+      if (window.comm_manager || ((window.Jupyter !== undefined) && (Jupyter.notebook.kernel != null))) {
+        var comm_manager = window.comm_manager || Jupyter.notebook.kernel.comm_manager;
+        comm_manager.register_target(comm_id, function(comm) {
+          comm.on_msg(msg_handler);
+        });
+      } else if ((plot_id in window.PyViz.kernels) && (window.PyViz.kernels[plot_id])) {
+        window.PyViz.kernels[plot_id].registerCommTarget(comm_id, function(comm) {
+          comm.onMsg = msg_handler;
+        });
+      } else if (typeof google != 'undefined' && google.colab.kernel != null) {
+        google.colab.kernel.comms.registerTarget(comm_id, (comm) => {
+          var messages = comm.messages[Symbol.asyncIterator]();
+          function processIteratorResult(result) {
+            var message = result.value;
+            console.log(message)
+            var content = {data: message.data, comm_id};
+            var buffers = []
+            for (var buffer of message.buffers || []) {
+              buffers.push(new DataView(buffer))
+            }
+            var metadata = message.metadata || {};
+            var msg = {content, buffers, metadata}
+            msg_handler(msg);
+            return messages.next().then(processIteratorResult);
+          }
+          return messages.next().then(processIteratorResult);
+        })
+      }
+    }
+
+    JupyterCommManager.prototype.get_client_comm = function(plot_id, comm_id, msg_handler) {
+      if (comm_id in window.PyViz.comms) {
+        return window.PyViz.comms[comm_id];
+      } else if (window.comm_manager || ((window.Jupyter !== undefined) && (Jupyter.notebook.kernel != null))) {
+        var comm_manager = window.comm_manager || Jupyter.notebook.kernel.comm_manager;
+        var comm = comm_manager.new_comm(comm_id, {}, {}, {}, comm_id);
+        if (msg_handler) {
+          comm.on_msg(msg_handler);
+        }
+      } else if ((plot_id in window.PyViz.kernels) && (window.PyViz.kernels[plot_id])) {
+        var comm = window.PyViz.kernels[plot_id].connectToComm(comm_id);
+        comm.open();
+        if (msg_handler) {
+          comm.onMsg = msg_handler;
+        }
+      } else if (typeof google != 'undefined' && google.colab.kernel != null) {
+        var comm_promise = google.colab.kernel.comms.open(comm_id)
+        comm_promise.then((comm) => {
+          window.PyViz.comms[comm_id] = comm;
+          if (msg_handler) {
+            var messages = comm.messages[Symbol.asyncIterator]();
+            function processIteratorResult(result) {
+              var message = result.value;
+              var content = {data: message.data};
+              var metadata = message.metadata || {comm_id};
+              var msg = {content, metadata}
+              msg_handler(msg);
+              return messages.next().then(processIteratorResult);
+            }
+            return messages.next().then(processIteratorResult);
+          }
+        }) 
+        var sendClosure = (data, metadata, buffers, disposeOnDone) => {
+          return comm_promise.then((comm) => {
+            comm.send(data, metadata, buffers, disposeOnDone);
+          });
+        };
+        var comm = {
+          send: sendClosure
+        };
+      }
+      window.PyViz.comms[comm_id] = comm;
+      return comm;
+    }
+    window.PyViz.comm_manager = new JupyterCommManager();
+    
+
+
+var JS_MIME_TYPE = 'application/javascript';
+var HTML_MIME_TYPE = 'text/html';
+var EXEC_MIME_TYPE = 'application/vnd.holoviews_exec.v0+json';
+var CLASS_NAME = 'output';
+
+/**
+ * Render data to the DOM node
+ */
+function render(props, node) {
+  var div = document.createElement("div");
+  var script = document.createElement("script");
+  node.appendChild(div);
+  node.appendChild(script);
+}
+
+/**
+ * Handle when a new output is added
+ */
+function handle_add_output(event, handle) {
+  var output_area = handle.output_area;
+  var output = handle.output;
+  if ((output.data == undefined) || (!output.data.hasOwnProperty(EXEC_MIME_TYPE))) {
+    return
+  }
+  var id = output.metadata[EXEC_MIME_TYPE]["id"];
+  var toinsert = output_area.element.find("." + CLASS_NAME.split(' ')[0]);
+  if (id !== undefined) {
+    var nchildren = toinsert.length;
+    var html_node = toinsert[nchildren-1].children[0];
+    html_node.innerHTML = output.data[HTML_MIME_TYPE];
+    var scripts = [];
+    var nodelist = html_node.querySelectorAll("script");
+    for (var i in nodelist) {
+      if (nodelist.hasOwnProperty(i)) {
+        scripts.push(nodelist[i])
+      }
+    }
+
+    scripts.forEach( function (oldScript) {
+      var newScript = document.createElement("script");
+      var attrs = [];
+      var nodemap = oldScript.attributes;
+      for (var j in nodemap) {
+        if (nodemap.hasOwnProperty(j)) {
+          attrs.push(nodemap[j])
+        }
+      }
+      attrs.forEach(function(attr) { newScript.setAttribute(attr.name, attr.value) });
+      newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+      oldScript.parentNode.replaceChild(newScript, oldScript);
+    });
+    if (JS_MIME_TYPE in output.data) {
+      toinsert[nchildren-1].children[1].textContent = output.data[JS_MIME_TYPE];
+    }
+    output_area._hv_plot_id = id;
+    if ((window.Bokeh !== undefined) && (id in Bokeh.index)) {
+      window.PyViz.plot_index[id] = Bokeh.index[id];
+    } else {
+      window.PyViz.plot_index[id] = null;
+    }
+  } else if (output.metadata[EXEC_MIME_TYPE]["server_id"] !== undefined) {
+    var bk_div = document.createElement("div");
+    bk_div.innerHTML = output.data[HTML_MIME_TYPE];
+    var script_attrs = bk_div.children[0].attributes;
+    for (var i = 0; i < script_attrs.length; i++) {
+      toinsert[toinsert.length - 1].childNodes[1].setAttribute(script_attrs[i].name, script_attrs[i].value);
+    }
+    // store reference to server id on output_area
+    output_area._bokeh_server_id = output.metadata[EXEC_MIME_TYPE]["server_id"];
+  }
+}
+
+/**
+ * Handle when an output is cleared or removed
+ */
+function handle_clear_output(event, handle) {
+  var id = handle.cell.output_area._hv_plot_id;
+  var server_id = handle.cell.output_area._bokeh_server_id;
+  if (((id === undefined) || !(id in PyViz.plot_index)) && (server_id !== undefined)) { return; }
+  var comm = window.PyViz.comm_manager.get_client_comm("hv-extension-comm", "hv-extension-comm", function () {});
+  if (server_id !== null) {
+    comm.send({event_type: 'server_delete', 'id': server_id});
+    return;
+  } else if (comm !== null) {
+    comm.send({event_type: 'delete', 'id': id});
+  }
+  delete PyViz.plot_index[id];
+  if ((window.Bokeh !== undefined) & (id in window.Bokeh.index)) {
+    var doc = window.Bokeh.index[id].model.document
+    doc.clear();
+    const i = window.Bokeh.documents.indexOf(doc);
+    if (i > -1) {
+      window.Bokeh.documents.splice(i, 1);
+    }
+  }
+}
+
+/**
+ * Handle kernel restart event
+ */
+function handle_kernel_cleanup(event, handle) {
+  delete PyViz.comms["hv-extension-comm"];
+  window.PyViz.plot_index = {}
+}
+
+/**
+ * Handle update_display_data messages
+ */
+function handle_update_output(event, handle) {
+  handle_clear_output(event, {cell: {output_area: handle.output_area}})
+  handle_add_output(event, handle)
+}
+
+function register_renderer(events, OutputArea) {
+  function append_mime(data, metadata, element) {
+    // create a DOM node to render to
+    var toinsert = this.create_output_subarea(
+    metadata,
+    CLASS_NAME,
+    EXEC_MIME_TYPE
+    );
+    this.keyboard_manager.register_events(toinsert);
+    // Render to node
+    var props = {data: data, metadata: metadata[EXEC_MIME_TYPE]};
+    render(props, toinsert[0]);
+    element.append(toinsert);
+    return toinsert
+  }
+
+  events.on('output_added.OutputArea', handle_add_output);
+  events.on('output_updated.OutputArea', handle_update_output);
+  events.on('clear_output.CodeCell', handle_clear_output);
+  events.on('delete.Cell', handle_clear_output);
+  events.on('kernel_ready.Kernel', handle_kernel_cleanup);
+
+  OutputArea.prototype.register_mime_type(EXEC_MIME_TYPE, append_mime, {
+    safe: true,
+    index: 0
+  });
+}
+
+if (window.Jupyter !== undefined) {
+  try {
+    var events = require('base/js/events');
+    var OutputArea = require('notebook/js/outputarea').OutputArea;
+    if (OutputArea.prototype.mime_types().indexOf(EXEC_MIME_TYPE) == -1) {
+      register_renderer(events, OutputArea);
+    }
+  } catch(err) {
+  }
+}
+</script><div class="output text_html"><div id='f3646fae-251f-4353-970a-42a5b9c5bab8'>
+  <div id="d502004c-d6c0-402b-afb4-f3d78af3b5ba" data-root-id="f3646fae-251f-4353-970a-42a5b9c5bab8" style="display: contents;"></div>
+</div>
+<script type="application/javascript">(function(root) {
+  var docs_json = {"d18077ce-da2a-4563-8321-960cc9c016b9":{"version":"3.5.2","title":"Bokeh Application","roots":[{"type":"object","name":"panel.models.browser.BrowserInfo","id":"f3646fae-251f-4353-970a-42a5b9c5bab8"},{"type":"object","name":"panel.models.comm_manager.CommManager","id":"fd48c8dc-27a8-4e0f-8cfd-00b2bf6839b9","attributes":{"plot_id":"f3646fae-251f-4353-970a-42a5b9c5bab8","comm_id":"42e89ea59eac47b090dd1416fe49cf0c","client_comm_id":"d094b66018aa409d872d1d34aec9422c"}}],"defs":[{"type":"model","name":"ReactiveHTML1"},{"type":"model","name":"FlexBox1","properties":[{"name":"align_content","kind":"Any","default":"flex-start"},{"name":"align_items","kind":"Any","default":"flex-start"},{"name":"flex_direction","kind":"Any","default":"row"},{"name":"flex_wrap","kind":"Any","default":"wrap"},{"name":"gap","kind":"Any","default":""},{"name":"justify_content","kind":"Any","default":"flex-start"}]},{"type":"model","name":"FloatPanel1","properties":[{"name":"config","kind":"Any","default":{"type":"map"}},{"name":"contained","kind":"Any","default":true},{"name":"position","kind":"Any","default":"right-top"},{"name":"offsetx","kind":"Any","default":null},{"name":"offsety","kind":"Any","default":null},{"name":"theme","kind":"Any","default":"primary"},{"name":"status","kind":"Any","default":"normalized"}]},{"type":"model","name":"GridStack1","properties":[{"name":"mode","kind":"Any","default":"warn"},{"name":"ncols","kind":"Any","default":null},{"name":"nrows","kind":"Any","default":null},{"name":"allow_resize","kind":"Any","default":true},{"name":"allow_drag","kind":"Any","default":true},{"name":"state","kind":"Any","default":[]}]},{"type":"model","name":"drag1","properties":[{"name":"slider_width","kind":"Any","default":5},{"name":"slider_color","kind":"Any","default":"black"},{"name":"value","kind":"Any","default":50}]},{"type":"model","name":"click1","properties":[{"name":"terminal_output","kind":"Any","default":""},{"name":"debug_name","kind":"Any","default":""},{"name":"clears","kind":"Any","default":0}]},{"type":"model","name":"FastWrapper1","properties":[{"name":"object","kind":"Any","default":null},{"name":"style","kind":"Any","default":null}]},{"type":"model","name":"NotificationAreaBase1","properties":[{"name":"js_events","kind":"Any","default":{"type":"map"}},{"name":"position","kind":"Any","default":"bottom-right"},{"name":"_clear","kind":"Any","default":0}]},{"type":"model","name":"NotificationArea1","properties":[{"name":"js_events","kind":"Any","default":{"type":"map"}},{"name":"notifications","kind":"Any","default":[]},{"name":"position","kind":"Any","default":"bottom-right"},{"name":"_clear","kind":"Any","default":0},{"name":"types","kind":"Any","default":[{"type":"map","entries":[["type","warning"],["background","#ffc107"],["icon",{"type":"map","entries":[["className","fas fa-exclamation-triangle"],["tagName","i"],["color","white"]]}]]},{"type":"map","entries":[["type","info"],["background","#007bff"],["icon",{"type":"map","entries":[["className","fas fa-info-circle"],["tagName","i"],["color","white"]]}]]}]}]},{"type":"model","name":"Notification","properties":[{"name":"background","kind":"Any","default":null},{"name":"duration","kind":"Any","default":3000},{"name":"icon","kind":"Any","default":null},{"name":"message","kind":"Any","default":""},{"name":"notification_type","kind":"Any","default":null},{"name":"_destroyed","kind":"Any","default":false}]},{"type":"model","name":"TemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"BootstrapTemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"TemplateEditor1","properties":[{"name":"layout","kind":"Any","default":[]}]},{"type":"model","name":"MaterialTemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"ReactiveESM1"},{"type":"model","name":"JSComponent1"},{"type":"model","name":"ReactComponent1"},{"type":"model","name":"AnyWidgetComponent1"},{"type":"model","name":"request_value1","properties":[{"name":"fill","kind":"Any","default":"none"},{"name":"_synced","kind":"Any","default":null},{"name":"_request_sync","kind":"Any","default":0}]}]}};
+  var render_items = [{"docid":"d18077ce-da2a-4563-8321-960cc9c016b9","roots":{"f3646fae-251f-4353-970a-42a5b9c5bab8":"d502004c-d6c0-402b-afb4-f3d78af3b5ba"},"root_ids":["f3646fae-251f-4353-970a-42a5b9c5bab8"]}];
+  var docs = Object.values(docs_json)
+  if (!docs) {
+    return
+  }
+  const py_version = docs[0].version.replace('rc', '-rc.').replace('.dev', '-dev.')
+  async function embed_document(root) {
+    var Bokeh = get_bokeh(root)
+    await Bokeh.embed.embed_items_notebook(docs_json, render_items);
+    for (const render_item of render_items) {
+      for (const root_id of render_item.root_ids) {
+	const id_el = document.getElementById(root_id)
+	if (id_el.children.length && id_el.children[0].hasAttribute('data-root-id')) {
+	  const root_el = id_el.children[0]
+	  root_el.id = root_el.id + '-rendered'
+	  for (const child of root_el.children) {
+            // Ensure JupyterLab does not capture keyboard shortcuts
+            // see: https://jupyterlab.readthedocs.io/en/4.1.x/extension/notebook.html#keyboard-interaction-model
+	    child.setAttribute('data-lm-suppress-shortcuts', 'true')
+	  }
+	}
+      }
+    }
+  }
+  function get_bokeh(root) {
+    if (root.Bokeh === undefined) {
+      return null
+    } else if (root.Bokeh.version !== py_version) {
+      if (root.Bokeh.versions === undefined || !root.Bokeh.versions.has(py_version)) {
+	return null
+      }
+      return root.Bokeh.versions.get(py_version);
+    } else if (root.Bokeh.version === py_version) {
+      return root.Bokeh
+    }
+    return null
+  }
+  function is_loaded(root) {
+    var Bokeh = get_bokeh(root)
+    return (Bokeh != null && Bokeh.Panel !== undefined)
+  }
+  if (is_loaded(root)) {
+    embed_document(root);
+  } else {
+    var attempts = 0;
+    var timer = setInterval(function(root) {
+      if (is_loaded(root)) {
+        clearInterval(timer);
+        embed_document(root);
+      } else if (document.readyState == "complete") {
+        attempts++;
+        if (attempts > 200) {
+          clearInterval(timer);
+	  var Bokeh = get_bokeh(root)
+	  if (Bokeh == null || Bokeh.Panel == null) {
+            console.warn("Panel: ERROR: Unable to run Panel code because Bokeh or Panel library is missing");
+	  } else {
+	    console.warn("Panel: WARNING: Attempting to render but not all required libraries could be resolved.")
+	    embed_document(root)
+	  }
+        }
+      }
+    }, 25, root)
+  }
+})(window);</script></div></div>
+</div>
+</section>
+<section id="gloria">
+<h3>GLORIA<a class="headerlink" href="#gloria" title="Link to this heading">#</a></h3>
+<p>The GLObal Reflectance community dataset for Imaging and optical sensing of Aquatic environments (GLORIA) includes 7,572 curated hyperspectral remote sensing reflectance measurements at 1 nm intervals within the 350 to 900 nm wavelength range. In addition, at least one co-located water quality measurement of chlorophyll a, total suspended solids, absorption by dissolved substances, and Secchi depth, is provided.</p>
+<p>The GLORIA dataset is publicly available from <a class="reference external" href="https://doi.pangaea.de/10.1594/PANGAEA.948492">PANGAEA</a></p>
+<p><img alt="" src="_images/GLORIA.png" /></p>
+<p>Now, let’s load the GLORIA dataset that measured global water quality and hyperpectral signatures. Note that, in my case, there are three datasets to read. This may not be your case.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Defining the path to three datasets</span>
+<span class="n">CSVFILE1</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;../../GLORIA1_Rrs.csv&quot;</span><span class="p">)</span>
+<span class="n">CSVFILE2</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;../../GLORIA2_Rrs.csv&quot;</span><span class="p">)</span>
+<span class="n">CSVFILE3</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;../../GLORIA3_Rrs.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># uncomment if you have a single dataset to read</span>
+<span class="c1">#CSVFILE = (&quot;../../GLORIA_Rrs.csv&quot;)</span>
+<span class="c1">#data = pd.read_csv(CSV_FILE, index_col=1)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reading three datasets</span>
+<span class="n">dt1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">CSVFILE1</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;GLORIA_ID&quot;</span><span class="p">)</span>
+<span class="n">dt2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">CSVFILE2</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;GLORIA_ID&quot;</span><span class="p">)</span>
+<span class="n">dt3</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">CSVFILE3</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;GLORIA_ID&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ignore if you read a single dataset</span>
+<span class="c1"># Concatenating three data frames</span>
+<span class="n">frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">dt1</span><span class="p">,</span> <span class="n">dt2</span><span class="p">,</span> <span class="n">dt3</span><span class="p">]</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">frames</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(7572, 552)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>Rrs_350</th>
+      <th>Rrs_351</th>
+      <th>Rrs_352</th>
+      <th>Rrs_353</th>
+      <th>Rrs_354</th>
+      <th>Rrs_355</th>
+      <th>Rrs_356</th>
+      <th>Rrs_357</th>
+      <th>Rrs_358</th>
+      <th>...</th>
+      <th>Rrs_891</th>
+      <th>Rrs_892</th>
+      <th>Rrs_893</th>
+      <th>Rrs_894</th>
+      <th>Rrs_895</th>
+      <th>Rrs_896</th>
+      <th>Rrs_897</th>
+      <th>Rrs_898</th>
+      <th>Rrs_899</th>
+      <th>Rrs_900</th>
+    </tr>
+    <tr>
+      <th>GLORIA_ID</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>GID_1</th>
+      <td>0</td>
+      <td>0.001231</td>
+      <td>0.001214</td>
+      <td>0.001214</td>
+      <td>0.001225</td>
+      <td>0.001215</td>
+      <td>0.001219</td>
+      <td>0.001224</td>
+      <td>0.001246</td>
+      <td>0.001261</td>
+      <td>...</td>
+      <td>0.000274</td>
+      <td>0.000272</td>
+      <td>0.000272</td>
+      <td>0.000270</td>
+      <td>0.000268</td>
+      <td>0.000266</td>
+      <td>0.000265</td>
+      <td>0.000264</td>
+      <td>0.000259</td>
+      <td>0.000256</td>
+    </tr>
+    <tr>
+      <th>GID_2</th>
+      <td>1</td>
+      <td>0.001054</td>
+      <td>0.001040</td>
+      <td>0.001043</td>
+      <td>0.001055</td>
+      <td>0.001046</td>
+      <td>0.001052</td>
+      <td>0.001060</td>
+      <td>0.001086</td>
+      <td>0.001106</td>
+      <td>...</td>
+      <td>0.000334</td>
+      <td>0.000332</td>
+      <td>0.000331</td>
+      <td>0.000329</td>
+      <td>0.000327</td>
+      <td>0.000324</td>
+      <td>0.000322</td>
+      <td>0.000319</td>
+      <td>0.000311</td>
+      <td>0.000308</td>
+    </tr>
+    <tr>
+      <th>GID_3</th>
+      <td>2</td>
+      <td>0.001240</td>
+      <td>0.001224</td>
+      <td>0.001226</td>
+      <td>0.001239</td>
+      <td>0.001230</td>
+      <td>0.001236</td>
+      <td>0.001244</td>
+      <td>0.001271</td>
+      <td>0.001290</td>
+      <td>...</td>
+      <td>0.000451</td>
+      <td>0.000448</td>
+      <td>0.000447</td>
+      <td>0.000444</td>
+      <td>0.000441</td>
+      <td>0.000437</td>
+      <td>0.000435</td>
+      <td>0.000433</td>
+      <td>0.000423</td>
+      <td>0.000419</td>
+    </tr>
+    <tr>
+      <th>GID_4</th>
+      <td>3</td>
+      <td>0.001011</td>
+      <td>0.000997</td>
+      <td>0.001001</td>
+      <td>0.001014</td>
+      <td>0.001005</td>
+      <td>0.001012</td>
+      <td>0.001022</td>
+      <td>0.001050</td>
+      <td>0.001071</td>
+      <td>...</td>
+      <td>0.000516</td>
+      <td>0.000513</td>
+      <td>0.000512</td>
+      <td>0.000509</td>
+      <td>0.000505</td>
+      <td>0.000500</td>
+      <td>0.000499</td>
+      <td>0.000497</td>
+      <td>0.000487</td>
+      <td>0.000483</td>
+    </tr>
+    <tr>
+      <th>GID_5</th>
+      <td>4</td>
+      <td>0.001081</td>
+      <td>0.001067</td>
+      <td>0.001071</td>
+      <td>0.001084</td>
+      <td>0.001076</td>
+      <td>0.001083</td>
+      <td>0.001093</td>
+      <td>0.001122</td>
+      <td>0.001143</td>
+      <td>...</td>
+      <td>0.000590</td>
+      <td>0.000588</td>
+      <td>0.000587</td>
+      <td>0.000583</td>
+      <td>0.000580</td>
+      <td>0.000574</td>
+      <td>0.000572</td>
+      <td>0.000570</td>
+      <td>0.000558</td>
+      <td>0.000552</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 552 columns</p>
+</div></div></div>
+</div>
+<p>Let’s remove the Unnamed column:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Removing unnamed columns using drop function</span>
+<span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span>
+    <span class="s1">&#39;unnamed&#39;</span><span class="p">,</span> <span class="n">case</span><span class="o">=</span><span class="kc">False</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Uncomment in case you need to replace column names</span>
+<span class="c1">#data.columns = data.columns.str.replace(&#39;Rrs_&#39;, &#39;&#39;)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Rrs_350</th>
+      <th>Rrs_351</th>
+      <th>Rrs_352</th>
+      <th>Rrs_353</th>
+      <th>Rrs_354</th>
+      <th>Rrs_355</th>
+      <th>Rrs_356</th>
+      <th>Rrs_357</th>
+      <th>Rrs_358</th>
+      <th>Rrs_359</th>
+      <th>...</th>
+      <th>Rrs_891</th>
+      <th>Rrs_892</th>
+      <th>Rrs_893</th>
+      <th>Rrs_894</th>
+      <th>Rrs_895</th>
+      <th>Rrs_896</th>
+      <th>Rrs_897</th>
+      <th>Rrs_898</th>
+      <th>Rrs_899</th>
+      <th>Rrs_900</th>
+    </tr>
+    <tr>
+      <th>GLORIA_ID</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>GID_1</th>
+      <td>0.001231</td>
+      <td>0.001214</td>
+      <td>0.001214</td>
+      <td>0.001225</td>
+      <td>0.001215</td>
+      <td>0.001219</td>
+      <td>0.001224</td>
+      <td>0.001246</td>
+      <td>0.001261</td>
+      <td>0.001262</td>
+      <td>...</td>
+      <td>0.000274</td>
+      <td>0.000272</td>
+      <td>0.000272</td>
+      <td>0.000270</td>
+      <td>0.000268</td>
+      <td>0.000266</td>
+      <td>0.000265</td>
+      <td>0.000264</td>
+      <td>0.000259</td>
+      <td>0.000256</td>
+    </tr>
+    <tr>
+      <th>GID_2</th>
+      <td>0.001054</td>
+      <td>0.001040</td>
+      <td>0.001043</td>
+      <td>0.001055</td>
+      <td>0.001046</td>
+      <td>0.001052</td>
+      <td>0.001060</td>
+      <td>0.001086</td>
+      <td>0.001106</td>
+      <td>0.001109</td>
+      <td>...</td>
+      <td>0.000334</td>
+      <td>0.000332</td>
+      <td>0.000331</td>
+      <td>0.000329</td>
+      <td>0.000327</td>
+      <td>0.000324</td>
+      <td>0.000322</td>
+      <td>0.000319</td>
+      <td>0.000311</td>
+      <td>0.000308</td>
+    </tr>
+    <tr>
+      <th>GID_3</th>
+      <td>0.001240</td>
+      <td>0.001224</td>
+      <td>0.001226</td>
+      <td>0.001239</td>
+      <td>0.001230</td>
+      <td>0.001236</td>
+      <td>0.001244</td>
+      <td>0.001271</td>
+      <td>0.001290</td>
+      <td>0.001294</td>
+      <td>...</td>
+      <td>0.000451</td>
+      <td>0.000448</td>
+      <td>0.000447</td>
+      <td>0.000444</td>
+      <td>0.000441</td>
+      <td>0.000437</td>
+      <td>0.000435</td>
+      <td>0.000433</td>
+      <td>0.000423</td>
+      <td>0.000419</td>
+    </tr>
+    <tr>
+      <th>GID_4</th>
+      <td>0.001011</td>
+      <td>0.000997</td>
+      <td>0.001001</td>
+      <td>0.001014</td>
+      <td>0.001005</td>
+      <td>0.001012</td>
+      <td>0.001022</td>
+      <td>0.001050</td>
+      <td>0.001071</td>
+      <td>0.001075</td>
+      <td>...</td>
+      <td>0.000516</td>
+      <td>0.000513</td>
+      <td>0.000512</td>
+      <td>0.000509</td>
+      <td>0.000505</td>
+      <td>0.000500</td>
+      <td>0.000499</td>
+      <td>0.000497</td>
+      <td>0.000487</td>
+      <td>0.000483</td>
+    </tr>
+    <tr>
+      <th>GID_5</th>
+      <td>0.001081</td>
+      <td>0.001067</td>
+      <td>0.001071</td>
+      <td>0.001084</td>
+      <td>0.001076</td>
+      <td>0.001083</td>
+      <td>0.001093</td>
+      <td>0.001122</td>
+      <td>0.001143</td>
+      <td>0.001147</td>
+      <td>...</td>
+      <td>0.000590</td>
+      <td>0.000588</td>
+      <td>0.000587</td>
+      <td>0.000583</td>
+      <td>0.000580</td>
+      <td>0.000574</td>
+      <td>0.000572</td>
+      <td>0.000570</td>
+      <td>0.000558</td>
+      <td>0.000552</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 551 columns</p>
+</div></div></div>
+</div>
+</section>
+</section>
+<section id="checking-the-metadata">
+<h2>Checking the metadata<a class="headerlink" href="#checking-the-metadata" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">##### Analyzing GLORIA metadata #######</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;./GLORIA/GLORIA_meta_and_lab.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">metadata</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Organization_ID</th>
+      <th>Dataset_ID</th>
+      <th>Sample_ID</th>
+      <th>LIMNADES_ID</th>
+      <th>LIMNADES_UID</th>
+      <th>SeaBASS_ID</th>
+      <th>Data_collection_purpose</th>
+      <th>Special_event_flag</th>
+      <th>Site_name</th>
+      <th>Country</th>
+      <th>...</th>
+      <th>TSS_method</th>
+      <th>aCDOM_method</th>
+      <th>Chla</th>
+      <th>Chla_plus_phaeo</th>
+      <th>TSS</th>
+      <th>aCDOM440</th>
+      <th>Turbidity</th>
+      <th>Secchi_depth</th>
+      <th>AOT</th>
+      <th>Comments</th>
+    </tr>
+    <tr>
+      <th>GLORIA_ID</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>GID_1</th>
+      <td>UT-TO</td>
+      <td>AlikasK_EE_UT-TO</td>
+      <td>53</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>3.0</td>
+      <td>NaN</td>
+      <td>Lake Peipsi</td>
+      <td>Estonia</td>
+      <td>...</td>
+      <td>ESS Method 340.2</td>
+      <td>NASA TM 2003-211621</td>
+      <td>NaN</td>
+      <td>8.16</td>
+      <td>2.67</td>
+      <td>2.532844</td>
+      <td>NaN</td>
+      <td>1.85</td>
+      <td>NaN</td>
+      <td>Lake Peipsi</td>
+    </tr>
+    <tr>
+      <th>GID_2</th>
+      <td>UT-TO</td>
+      <td>AlikasK_EE_UT-TO</td>
+      <td>54</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>3.0</td>
+      <td>NaN</td>
+      <td>Lake Peipsi</td>
+      <td>Estonia</td>
+      <td>...</td>
+      <td>ESS Method 340.2</td>
+      <td>NASA TM 2003-211621</td>
+      <td>NaN</td>
+      <td>8.60</td>
+      <td>5.67</td>
+      <td>2.624947</td>
+      <td>NaN</td>
+      <td>1.80</td>
+      <td>NaN</td>
+      <td>Lake Peipsi</td>
+    </tr>
+    <tr>
+      <th>GID_3</th>
+      <td>UT-TO</td>
+      <td>AlikasK_EE_UT-TO</td>
+      <td>55</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>3.0</td>
+      <td>NaN</td>
+      <td>Lake Peipsi</td>
+      <td>Estonia</td>
+      <td>...</td>
+      <td>ESS Method 340.2</td>
+      <td>NASA TM 2003-211621</td>
+      <td>NaN</td>
+      <td>7.27</td>
+      <td>8.00</td>
+      <td>2.578895</td>
+      <td>NaN</td>
+      <td>1.80</td>
+      <td>NaN</td>
+      <td>Lake Peipsi</td>
+    </tr>
+    <tr>
+      <th>GID_4</th>
+      <td>UT-TO</td>
+      <td>AlikasK_EE_UT-TO</td>
+      <td>56</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>3.0</td>
+      <td>NaN</td>
+      <td>Lake Peipsi</td>
+      <td>Estonia</td>
+      <td>...</td>
+      <td>ESS Method 340.2</td>
+      <td>NASA TM 2003-211621</td>
+      <td>NaN</td>
+      <td>7.30</td>
+      <td>7.00</td>
+      <td>3.085464</td>
+      <td>NaN</td>
+      <td>1.15</td>
+      <td>NaN</td>
+      <td>Lake Peipsi</td>
+    </tr>
+    <tr>
+      <th>GID_5</th>
+      <td>UT-TO</td>
+      <td>AlikasK_EE_UT-TO</td>
+      <td>57</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>3.0</td>
+      <td>NaN</td>
+      <td>Lake Peipsi</td>
+      <td>Estonia</td>
+      <td>...</td>
+      <td>ESS Method 340.2</td>
+      <td>NASA TM 2003-211621</td>
+      <td>NaN</td>
+      <td>13.05</td>
+      <td>8.67</td>
+      <td>3.039412</td>
+      <td>NaN</td>
+      <td>1.00</td>
+      <td>NaN</td>
+      <td>Lake Peipsi</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>GID_7769</th>
+      <td>UiB</td>
+      <td>KristoffersenA_NO_UiB</td>
+      <td>L1</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>Lurefjorden</td>
+      <td>Norway</td>
+      <td>...</td>
+      <td>UiB TSS</td>
+      <td>UiB CDOM</td>
+      <td>3.957</td>
+      <td>NaN</td>
+      <td>13.35</td>
+      <td>0.348420</td>
+      <td>NaN</td>
+      <td>7.50</td>
+      <td>NaN</td>
+      <td>Threshold marine inland fjord</td>
+    </tr>
+    <tr>
+      <th>GID_7770</th>
+      <td>UiB</td>
+      <td>KristoffersenA_NO_UiB</td>
+      <td>L2</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>Lurefjorden</td>
+      <td>Norway</td>
+      <td>...</td>
+      <td>UiB TSS</td>
+      <td>UiB CDOM</td>
+      <td>4.400</td>
+      <td>NaN</td>
+      <td>18.67</td>
+      <td>0.228306</td>
+      <td>NaN</td>
+      <td>8.30</td>
+      <td>NaN</td>
+      <td>CDOM are salinity corrected</td>
+    </tr>
+    <tr>
+      <th>GID_7771</th>
+      <td>UiB</td>
+      <td>KristoffersenA_NO_UiB</td>
+      <td>L3</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>Lurefjorden</td>
+      <td>Norway</td>
+      <td>...</td>
+      <td>UiB TSS</td>
+      <td>UiB CDOM</td>
+      <td>3.643</td>
+      <td>NaN</td>
+      <td>10.80</td>
+      <td>0.310476</td>
+      <td>NaN</td>
+      <td>7.70</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>GID_7772</th>
+      <td>UiB</td>
+      <td>KristoffersenA_NO_UiB</td>
+      <td>L4</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>Lurefjorden</td>
+      <td>Norway</td>
+      <td>...</td>
+      <td>UiB TSS</td>
+      <td>UiB CDOM</td>
+      <td>4.353</td>
+      <td>NaN</td>
+      <td>11.06</td>
+      <td>0.345544</td>
+      <td>NaN</td>
+      <td>7.60</td>
+      <td>NaN</td>
+      <td>Special_event_flag: rain for last two stations...</td>
+    </tr>
+    <tr>
+      <th>GID_7773</th>
+      <td>UiB</td>
+      <td>KristoffersenA_NO_UiB</td>
+      <td>L5</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>Lurefjorden</td>
+      <td>Norway</td>
+      <td>...</td>
+      <td>UiB TSS</td>
+      <td>UiB CDOM</td>
+      <td>8.514</td>
+      <td>NaN</td>
+      <td>8.56</td>
+      <td>0.723857</td>
+      <td>NaN</td>
+      <td>6.70</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>7572 rows × 63 columns</p>
+</div></div></div>
+</div>
+</section>
+<section id="total-suspended-solids-tss">
+<h2>Total Suspended Solids (TSS)<a class="headerlink" href="#total-suspended-solids-tss" title="Link to this heading">#</a></h2>
+<p><img alt="" src="_images/TSS_TSD.png" /></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># selecting rows based on condition</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;TSS&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># selecting rows based on condition</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">index</span><span class="p">[(</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;TSS&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;TSS&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">)]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># selecting rows based on condition</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;TSS&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualizing-a-subset-of-the-data">
+<h2>Visualizing a Subset of the Data<a class="headerlink" href="#visualizing-a-subset-of-the-data" title="Link to this heading">#</a></h2>
+<p>Before diving into Panel, let’s create a function that smooths one of our time series and identifies outliers. Then, we’ll plot the result using hvPlot:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">transform_data</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">middle</span><span class="p">,</span> <span class="n">high</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates the rolling average and identifies outliers&quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">metadata</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">middle</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">index</span><span class="p">[(</span><span class="n">metadata</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">middle</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;TSS&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">high</span><span class="p">)]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">metadata</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">middle</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">data4</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">a</span><span class="p">)]</span>
+    <span class="n">avg1</span> <span class="o">=</span> <span class="n">data4</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">data4</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">b</span><span class="p">)]</span>
+    <span class="n">avg2</span> <span class="o">=</span> <span class="n">data4</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">data4</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">c</span><span class="p">)]</span>
+    <span class="n">avg3</span> <span class="o">=</span> <span class="n">data4</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">avg1</span><span class="p">,</span> <span class="n">avg2</span><span class="p">,</span> <span class="n">avg3</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, let’s define a function to plot the average of the a,b, and c  TSS ranges</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_plot</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">middle</span><span class="p">,</span><span class="n">high</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Plots the average for each range&quot;&quot;&quot;</span>
+    <span class="n">avg1</span><span class="p">,</span> <span class="n">avg2</span><span class="p">,</span> <span class="n">avg3</span> <span class="o">=</span> <span class="n">transform_data</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">middle</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">avg1</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span>
+        <span class="n">height</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">PRIMARY_COLOR</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span> <span class="n">variable</span> <span class="o">+</span> <span class="s1">&#39; &gt; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+    <span class="p">)</span> <span class="o">*</span> <span class="n">avg2</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">SECONDARY_COLOR</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">middle</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &lt; &#39;</span> <span class="o">+</span> <span class="n">variable</span> <span class="o">+</span> <span class="s1">&#39; &lt; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+                           <span class="p">)</span> <span class="o">*</span> <span class="n">avg3</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">TERCIARY_COLOR</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span> <span class="n">variable</span> <span class="o">+</span> <span class="s1">&#39; &lt; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">middle</span><span class="p">)</span>
+                                          <span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Average reflectance&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we can call our get_plot function with specific parameters to obtain a plot with a single set of parameters:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">get_plot</span><span class="p">(</span><span class="s1">&#39;TSS&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span><span class="mi">500</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div id='49501848-6f54-4fea-b852-6566749b29cf'>
+  <div id="b7167293-95c2-4fbb-809c-2395851ae39a" data-root-id="49501848-6f54-4fea-b852-6566749b29cf" style="display: contents;"></div>
+</div>
+<script type="application/javascript">(function(root) {
+  var docs_json = {"0549fce8-4fd1-4e4f-8d56-0aad0e8cc7e7":{"version":"3.5.2","title":"Bokeh Application","roots":[{"type":"object","name":"Row","id":"49501848-6f54-4fea-b852-6566749b29cf","attributes":{"name":"Row01090","tags":["embedded"],"stylesheets":["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #c3c3c3;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}",{"type":"object","name":"ImportedStyleSheet","id":"128e38eb-d34e-4e05-b55d-d115b88f104b","attributes":{"url":"https://cdn.holoviz.org/panel/1.5.2/dist/css/loading.css"}},{"type":"object","name":"ImportedStyleSheet","id":"1420fa6d-cba4-49ed-9e19-c86800ff274b","attributes":{"url":"https://cdn.holoviz.org/panel/1.5.2/dist/css/listpanel.css"}},{"type":"object","name":"ImportedStyleSheet","id":"3117f01e-7330-4f9b-9fcd-ca2d692269c4","attributes":{"url":"https://cdn.jsdelivr.net/npm/material-components-web@7.0.0/dist/material-components-web.min.css"}},{"type":"object","name":"ImportedStyleSheet","id":"72428f5a-bbbb-49f4-8f36-7ac60ab305f4","attributes":{"url":"https://cdn.holoviz.org/panel/1.5.2/dist/bundled/theme/default.css"}},{"type":"object","name":"ImportedStyleSheet","id":"7a82775f-5d37-4e3d-bb00-f1c6c23ad67b","attributes":{"url":"https://cdn.holoviz.org/panel/1.5.2/dist/bundled/theme/material_variables.css"}},{"type":"object","name":"ImportedStyleSheet","id":"875a1921-87a4-4b6d-a052-fdda9a80f30e","attributes":{"url":"https://cdn.holoviz.org/panel/1.5.2/dist/bundled/theme/material.css"}}],"min_width":700,"margin":0,"sizing_mode":"stretch_width","align":"start","children":[{"type":"object","name":"Spacer","id":"8526c4ba-92ec-4ec4-9340-5798ea393ec8","attributes":{"name":"HSpacer01096","stylesheets":["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #c3c3c3;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}",{"id":"128e38eb-d34e-4e05-b55d-d115b88f104b"},{"id":"3117f01e-7330-4f9b-9fcd-ca2d692269c4"},{"id":"72428f5a-bbbb-49f4-8f36-7ac60ab305f4"},{"id":"7a82775f-5d37-4e3d-bb00-f1c6c23ad67b"},{"id":"875a1921-87a4-4b6d-a052-fdda9a80f30e"}],"margin":0,"sizing_mode":"stretch_width","align":"start"}},{"type":"object","name":"Figure","id":"23717054-314c-486b-bebf-6b26d67c2bfa","attributes":{"width":700,"height":300,"margin":[5,10],"sizing_mode":"fixed","align":"start","x_range":{"type":"object","name":"FactorRange","id":"210e65ef-c85b-4d9d-b4f7-154b0efed9ca","attributes":{"tags":[[["index",null]],[]],"factors":["Rrs_350","Rrs_351","Rrs_352","Rrs_353","Rrs_354","Rrs_355","Rrs_356","Rrs_357","Rrs_358","Rrs_359","Rrs_360","Rrs_361","Rrs_362","Rrs_363","Rrs_364","Rrs_365","Rrs_366","Rrs_367","Rrs_368","Rrs_369","Rrs_370","Rrs_371","Rrs_372","Rrs_373","Rrs_374","Rrs_375","Rrs_376","Rrs_377","Rrs_378","Rrs_379","Rrs_380","Rrs_381","Rrs_382","Rrs_383","Rrs_384","Rrs_385","Rrs_386","Rrs_387","Rrs_388","Rrs_389","Rrs_390","Rrs_391","Rrs_392","Rrs_393","Rrs_394","Rrs_395","Rrs_396","Rrs_397","Rrs_398","Rrs_399","Rrs_400","Rrs_401","Rrs_402","Rrs_403","Rrs_404","Rrs_405","Rrs_406","Rrs_407","Rrs_408","Rrs_409","Rrs_410","Rrs_411","Rrs_412","Rrs_413","Rrs_414","Rrs_415","Rrs_416","Rrs_417","Rrs_418","Rrs_419","Rrs_420","Rrs_421","Rrs_422","Rrs_423","Rrs_424","Rrs_425","Rrs_426","Rrs_427","Rrs_428","Rrs_429","Rrs_430","Rrs_431","Rrs_432","Rrs_433","Rrs_434","Rrs_435","Rrs_436","Rrs_437","Rrs_438","Rrs_439","Rrs_440","Rrs_441","Rrs_442","Rrs_443","Rrs_444","Rrs_445","Rrs_446","Rrs_447","Rrs_448","Rrs_449","Rrs_450","Rrs_451","Rrs_452","Rrs_453","Rrs_454","Rrs_455","Rrs_456","Rrs_457","Rrs_458","Rrs_459","Rrs_460","Rrs_461","Rrs_462","Rrs_463","Rrs_464","Rrs_465","Rrs_466","Rrs_467","Rrs_468","Rrs_469","Rrs_470","Rrs_471","Rrs_472","Rrs_473","Rrs_474","Rrs_475","Rrs_476","Rrs_477","Rrs_478","Rrs_479","Rrs_480","Rrs_481","Rrs_482","Rrs_483","Rrs_484","Rrs_485","Rrs_486","Rrs_487","Rrs_488","Rrs_489","Rrs_490","Rrs_491","Rrs_492","Rrs_493","Rrs_494","Rrs_495","Rrs_496","Rrs_497","Rrs_498","Rrs_499","Rrs_500","Rrs_501","Rrs_502","Rrs_503","Rrs_504","Rrs_505","Rrs_506","Rrs_507","Rrs_508","Rrs_509","Rrs_510","Rrs_511","Rrs_512","Rrs_513","Rrs_514","Rrs_515","Rrs_516","Rrs_517","Rrs_518","Rrs_519","Rrs_520","Rrs_521","Rrs_522","Rrs_523","Rrs_524","Rrs_525","Rrs_526","Rrs_527","Rrs_528","Rrs_529","Rrs_530","Rrs_531","Rrs_532","Rrs_533","Rrs_534","Rrs_535","Rrs_536","Rrs_537","Rrs_538","Rrs_539","Rrs_540","Rrs_541","Rrs_542","Rrs_543","Rrs_544","Rrs_545","Rrs_546","Rrs_547","Rrs_548","Rrs_549","Rrs_550","Rrs_551","Rrs_552","Rrs_553","Rrs_554","Rrs_555","Rrs_556","Rrs_557","Rrs_558","Rrs_559","Rrs_560","Rrs_561","Rrs_562","Rrs_563","Rrs_564","Rrs_565","Rrs_566","Rrs_567","Rrs_568","Rrs_569","Rrs_570","Rrs_571","Rrs_572","Rrs_573","Rrs_574","Rrs_575","Rrs_576","Rrs_577","Rrs_578","Rrs_579","Rrs_580","Rrs_581","Rrs_582","Rrs_583","Rrs_584","Rrs_585","Rrs_586","Rrs_587","Rrs_588","Rrs_589","Rrs_590","Rrs_591","Rrs_592","Rrs_593","Rrs_594","Rrs_595","Rrs_596","Rrs_597","Rrs_598","Rrs_599","Rrs_600","Rrs_601","Rrs_602","Rrs_603","Rrs_604","Rrs_605","Rrs_606","Rrs_607","Rrs_608","Rrs_609","Rrs_610","Rrs_611","Rrs_612","Rrs_613","Rrs_614","Rrs_615","Rrs_616","Rrs_617","Rrs_618","Rrs_619","Rrs_620","Rrs_621","Rrs_622","Rrs_623","Rrs_624","Rrs_625","Rrs_626","Rrs_627","Rrs_628","Rrs_629","Rrs_630","Rrs_631","Rrs_632","Rrs_633","Rrs_634","Rrs_635","Rrs_636","Rrs_637","Rrs_638","Rrs_639","Rrs_640","Rrs_641","Rrs_642","Rrs_643","Rrs_644","Rrs_645","Rrs_646","Rrs_647","Rrs_648","Rrs_649","Rrs_650","Rrs_651","Rrs_652","Rrs_653","Rrs_654","Rrs_655","Rrs_656","Rrs_657","Rrs_658","Rrs_659","Rrs_660","Rrs_661","Rrs_662","Rrs_663","Rrs_664","Rrs_665","Rrs_666","Rrs_667","Rrs_668","Rrs_669","Rrs_670","Rrs_671","Rrs_672","Rrs_673","Rrs_674","Rrs_675","Rrs_676","Rrs_677","Rrs_678","Rrs_679","Rrs_680","Rrs_681","Rrs_682","Rrs_683","Rrs_684","Rrs_685","Rrs_686","Rrs_687","Rrs_688","Rrs_689","Rrs_690","Rrs_691","Rrs_692","Rrs_693","Rrs_694","Rrs_695","Rrs_696","Rrs_697","Rrs_698","Rrs_699","Rrs_700","Rrs_701","Rrs_702","Rrs_703","Rrs_704","Rrs_705","Rrs_706","Rrs_707","Rrs_708","Rrs_709","Rrs_710","Rrs_711","Rrs_712","Rrs_713","Rrs_714","Rrs_715","Rrs_716","Rrs_717","Rrs_718","Rrs_719","Rrs_720","Rrs_721","Rrs_722","Rrs_723","Rrs_724","Rrs_725","Rrs_726","Rrs_727","Rrs_728","Rrs_729","Rrs_730","Rrs_731","Rrs_732","Rrs_733","Rrs_734","Rrs_735","Rrs_736","Rrs_737","Rrs_738","Rrs_739","Rrs_740","Rrs_741","Rrs_742","Rrs_743","Rrs_744","Rrs_745","Rrs_746","Rrs_747","Rrs_748","Rrs_749","Rrs_750","Rrs_751","Rrs_752","Rrs_753","Rrs_754","Rrs_755","Rrs_756","Rrs_757","Rrs_758","Rrs_759","Rrs_760","Rrs_761","Rrs_762","Rrs_763","Rrs_764","Rrs_765","Rrs_766","Rrs_767","Rrs_768","Rrs_769","Rrs_770","Rrs_771","Rrs_772","Rrs_773","Rrs_774","Rrs_775","Rrs_776","Rrs_777","Rrs_778","Rrs_779","Rrs_780","Rrs_781","Rrs_782","Rrs_783","Rrs_784","Rrs_785","Rrs_786","Rrs_787","Rrs_788","Rrs_789","Rrs_790","Rrs_791","Rrs_792","Rrs_793","Rrs_794","Rrs_795","Rrs_796","Rrs_797","Rrs_798","Rrs_799","Rrs_800","Rrs_801","Rrs_802","Rrs_803","Rrs_804","Rrs_805","Rrs_806","Rrs_807","Rrs_808","Rrs_809","Rrs_810","Rrs_811","Rrs_812","Rrs_813","Rrs_814","Rrs_815","Rrs_816","Rrs_817","Rrs_818","Rrs_819","Rrs_820","Rrs_821","Rrs_822","Rrs_823","Rrs_824","Rrs_825","Rrs_826","Rrs_827","Rrs_828","Rrs_829","Rrs_830","Rrs_831","Rrs_832","Rrs_833","Rrs_834","Rrs_835","Rrs_836","Rrs_837","Rrs_838","Rrs_839","Rrs_840","Rrs_841","Rrs_842","Rrs_843","Rrs_844","Rrs_845","Rrs_846","Rrs_847","Rrs_848","Rrs_849","Rrs_850","Rrs_851","Rrs_852","Rrs_853","Rrs_854","Rrs_855","Rrs_856","Rrs_857","Rrs_858","Rrs_859","Rrs_860","Rrs_861","Rrs_862","Rrs_863","Rrs_864","Rrs_865","Rrs_866","Rrs_867","Rrs_868","Rrs_869","Rrs_870","Rrs_871","Rrs_872","Rrs_873","Rrs_874","Rrs_875","Rrs_876","Rrs_877","Rrs_878","Rrs_879","Rrs_880","Rrs_881","Rrs_882","Rrs_883","Rrs_884","Rrs_885","Rrs_886","Rrs_887","Rrs_888","Rrs_889","Rrs_890","Rrs_891","Rrs_892","Rrs_893","Rrs_894","Rrs_895","Rrs_896","Rrs_897","Rrs_898","Rrs_899","Rrs_900"]}},"y_range":{"type":"object","name":"Range1d","id":"e36af2f6-d47d-4068-8b54-c5c253967d9c","attributes":{"tags":[[["0",null]],{"type":"map","entries":[["invert_yaxis",false],["autorange",false]]}],"start":-0.0015000788572741726,"end":0.037238312025034075,"reset_start":-0.0015000788572741726,"reset_end":0.037238312025034075}},"x_scale":{"type":"object","name":"CategoricalScale","id":"7f1ef0f6-cac9-4d45-ae3f-b4f3ae7a073c"},"y_scale":{"type":"object","name":"LinearScale","id":"75b1266f-167e-4b6d-bf65-751ad8426007"},"title":{"type":"object","name":"Title","id":"90d54b07-8fb8-4568-9004-eb900a958a89","attributes":{"text":"Average reflectance","text_font":"Roboto, sans-serif, Verdana","text_font_size":"1.15em"}},"renderers":[{"type":"object","name":"GlyphRenderer","id":"711be962-cc32-4842-ba78-a38e52c69549","attributes":{"name":"TSS > 500","data_source":{"type":"object","name":"ColumnDataSource","id":"2ff3c511-b3c6-4a65-b108-227eb70d8de8","attributes":{"selected":{"type":"object","name":"Selection","id":"e953283e-a5cb-44d7-bedc-58425d100ff1","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"ced7683b-01bc-45c7-b2d6-c165d6a0bf85"},"data":{"type":"map","entries":[["index",["Rrs_350","Rrs_351","Rrs_352","Rrs_353","Rrs_354","Rrs_355","Rrs_356","Rrs_357","Rrs_358","Rrs_359","Rrs_360","Rrs_361","Rrs_362","Rrs_363","Rrs_364","Rrs_365","Rrs_366","Rrs_367","Rrs_368","Rrs_369","Rrs_370","Rrs_371","Rrs_372","Rrs_373","Rrs_374","Rrs_375","Rrs_376","Rrs_377","Rrs_378","Rrs_379","Rrs_380","Rrs_381","Rrs_382","Rrs_383","Rrs_384","Rrs_385","Rrs_386","Rrs_387","Rrs_388","Rrs_389","Rrs_390","Rrs_391","Rrs_392","Rrs_393","Rrs_394","Rrs_395","Rrs_396","Rrs_397","Rrs_398","Rrs_399","Rrs_400","Rrs_401","Rrs_402","Rrs_403","Rrs_404","Rrs_405","Rrs_406","Rrs_407","Rrs_408","Rrs_409","Rrs_410","Rrs_411","Rrs_412","Rrs_413","Rrs_414","Rrs_415","Rrs_416","Rrs_417","Rrs_418","Rrs_419","Rrs_420","Rrs_421","Rrs_422","Rrs_423","Rrs_424","Rrs_425","Rrs_426","Rrs_427","Rrs_428","Rrs_429","Rrs_430","Rrs_431","Rrs_432","Rrs_433","Rrs_434","Rrs_435","Rrs_436","Rrs_437","Rrs_438","Rrs_439","Rrs_440","Rrs_441","Rrs_442","Rrs_443","Rrs_444","Rrs_445","Rrs_446","Rrs_447","Rrs_448","Rrs_449","Rrs_450","Rrs_451","Rrs_452","Rrs_453","Rrs_454","Rrs_455","Rrs_456","Rrs_457","Rrs_458","Rrs_459","Rrs_460","Rrs_461","Rrs_462","Rrs_463","Rrs_464","Rrs_465","Rrs_466","Rrs_467","Rrs_468","Rrs_469","Rrs_470","Rrs_471","Rrs_472","Rrs_473","Rrs_474","Rrs_475","Rrs_476","Rrs_477","Rrs_478","Rrs_479","Rrs_480","Rrs_481","Rrs_482","Rrs_483","Rrs_484","Rrs_485","Rrs_486","Rrs_487","Rrs_488","Rrs_489","Rrs_490","Rrs_491","Rrs_492","Rrs_493","Rrs_494","Rrs_495","Rrs_496","Rrs_497","Rrs_498","Rrs_499","Rrs_500","Rrs_501","Rrs_502","Rrs_503","Rrs_504","Rrs_505","Rrs_506","Rrs_507","Rrs_508","Rrs_509","Rrs_510","Rrs_511","Rrs_512","Rrs_513","Rrs_514","Rrs_515","Rrs_516","Rrs_517","Rrs_518","Rrs_519","Rrs_520","Rrs_521","Rrs_522","Rrs_523","Rrs_524","Rrs_525","Rrs_526","Rrs_527","Rrs_528","Rrs_529","Rrs_530","Rrs_531","Rrs_532","Rrs_533","Rrs_534","Rrs_535","Rrs_536","Rrs_537","Rrs_538","Rrs_539","Rrs_540","Rrs_541","Rrs_542","Rrs_543","Rrs_544","Rrs_545","Rrs_546","Rrs_547","Rrs_548","Rrs_549","Rrs_550","Rrs_551","Rrs_552","Rrs_553","Rrs_554","Rrs_555","Rrs_556","Rrs_557","Rrs_558","Rrs_559","Rrs_560","Rrs_561","Rrs_562","Rrs_563","Rrs_564","Rrs_565","Rrs_566","Rrs_567","Rrs_568","Rrs_569","Rrs_570","Rrs_571","Rrs_572","Rrs_573","Rrs_574","Rrs_575","Rrs_576","Rrs_577","Rrs_578","Rrs_579","Rrs_580","Rrs_581","Rrs_582","Rrs_583","Rrs_584","Rrs_585","Rrs_586","Rrs_587","Rrs_588","Rrs_589","Rrs_590","Rrs_591","Rrs_592","Rrs_593","Rrs_594","Rrs_595","Rrs_596","Rrs_597","Rrs_598","Rrs_599","Rrs_600","Rrs_601","Rrs_602","Rrs_603","Rrs_604","Rrs_605","Rrs_606","Rrs_607","Rrs_608","Rrs_609","Rrs_610","Rrs_611","Rrs_612","Rrs_613","Rrs_614","Rrs_615","Rrs_616","Rrs_617","Rrs_618","Rrs_619","Rrs_620","Rrs_621","Rrs_622","Rrs_623","Rrs_624","Rrs_625","Rrs_626","Rrs_627","Rrs_628","Rrs_629","Rrs_630","Rrs_631","Rrs_632","Rrs_633","Rrs_634","Rrs_635","Rrs_636","Rrs_637","Rrs_638","Rrs_639","Rrs_640","Rrs_641","Rrs_642","Rrs_643","Rrs_644","Rrs_645","Rrs_646","Rrs_647","Rrs_648","Rrs_649","Rrs_650","Rrs_651","Rrs_652","Rrs_653","Rrs_654","Rrs_655","Rrs_656","Rrs_657","Rrs_658","Rrs_659","Rrs_660","Rrs_661","Rrs_662","Rrs_663","Rrs_664","Rrs_665","Rrs_666","Rrs_667","Rrs_668","Rrs_669","Rrs_670","Rrs_671","Rrs_672","Rrs_673","Rrs_674","Rrs_675","Rrs_676","Rrs_677","Rrs_678","Rrs_679","Rrs_680","Rrs_681","Rrs_682","Rrs_683","Rrs_684","Rrs_685","Rrs_686","Rrs_687","Rrs_688","Rrs_689","Rrs_690","Rrs_691","Rrs_692","Rrs_693","Rrs_694","Rrs_695","Rrs_696","Rrs_697","Rrs_698","Rrs_699","Rrs_700","Rrs_701","Rrs_702","Rrs_703","Rrs_704","Rrs_705","Rrs_706","Rrs_707","Rrs_708","Rrs_709","Rrs_710","Rrs_711","Rrs_712","Rrs_713","Rrs_714","Rrs_715","Rrs_716","Rrs_717","Rrs_718","Rrs_719","Rrs_720","Rrs_721","Rrs_722","Rrs_723","Rrs_724","Rrs_725","Rrs_726","Rrs_727","Rrs_728","Rrs_729","Rrs_730","Rrs_731","Rrs_732","Rrs_733","Rrs_734","Rrs_735","Rrs_736","Rrs_737","Rrs_738","Rrs_739","Rrs_740","Rrs_741","Rrs_742","Rrs_743","Rrs_744","Rrs_745","Rrs_746","Rrs_747","Rrs_748","Rrs_749","Rrs_750","Rrs_751","Rrs_752","Rrs_753","Rrs_754","Rrs_755","Rrs_756","Rrs_757","Rrs_758","Rrs_759","Rrs_760","Rrs_761","Rrs_762","Rrs_763","Rrs_764","Rrs_765","Rrs_766","Rrs_767","Rrs_768","Rrs_769","Rrs_770","Rrs_771","Rrs_772","Rrs_773","Rrs_774","Rrs_775","Rrs_776","Rrs_777","Rrs_778","Rrs_779","Rrs_780","Rrs_781","Rrs_782","Rrs_783","Rrs_784","Rrs_785","Rrs_786","Rrs_787","Rrs_788","Rrs_789","Rrs_790","Rrs_791","Rrs_792","Rrs_793","Rrs_794","Rrs_795","Rrs_796","Rrs_797","Rrs_798","Rrs_799","Rrs_800","Rrs_801","Rrs_802","Rrs_803","Rrs_804","Rrs_805","Rrs_806","Rrs_807","Rrs_808","Rrs_809","Rrs_810","Rrs_811","Rrs_812","Rrs_813","Rrs_814","Rrs_815","Rrs_816","Rrs_817","Rrs_818","Rrs_819","Rrs_820","Rrs_821","Rrs_822","Rrs_823","Rrs_824","Rrs_825","Rrs_826","Rrs_827","Rrs_828","Rrs_829","Rrs_830","Rrs_831","Rrs_832","Rrs_833","Rrs_834","Rrs_835","Rrs_836","Rrs_837","Rrs_838","Rrs_839","Rrs_840","Rrs_841","Rrs_842","Rrs_843","Rrs_844","Rrs_845","Rrs_846","Rrs_847","Rrs_848","Rrs_849","Rrs_850","Rrs_851","Rrs_852","Rrs_853","Rrs_854","Rrs_855","Rrs_856","Rrs_857","Rrs_858","Rrs_859","Rrs_860","Rrs_861","Rrs_862","Rrs_863","Rrs_864","Rrs_865","Rrs_866","Rrs_867","Rrs_868","Rrs_869","Rrs_870","Rrs_871","Rrs_872","Rrs_873","Rrs_874","Rrs_875","Rrs_876","Rrs_877","Rrs_878","Rrs_879","Rrs_880","Rrs_881","Rrs_882","Rrs_883","Rrs_884","Rrs_885","Rrs_886","Rrs_887","Rrs_888","Rrs_889","Rrs_890","Rrs_891","Rrs_892","Rrs_893","Rrs_894","Rrs_895","Rrs_896","Rrs_897","Rrs_898","Rrs_899","Rrs_900"]],["0",{"type":"ndarray","array":{"type":"bytes","data":"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"},"shape":[551],"dtype":"float64","order":"little"}],["A_0",{"type":"ndarray","array":{"type":"bytes","data":"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"},"shape":[551],"dtype":"float64","order":"little"}]]}}},"view":{"type":"object","name":"CDSView","id":"f9f60d4e-a133-4cf8-8190-311e8b7bb843","attributes":{"filter":{"type":"object","name":"AllIndices","id":"d76d52e8-0106-4da1-ba50-1c3458cce6ae"}}},"glyph":{"type":"object","name":"Line","id":"3eae9cc8-e556-4c38-8481-8e1aa1ba6de6","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"index"},"y":{"type":"field","field":"0"},"line_color":"#0072B5","line_width":3}},"selection_glyph":{"type":"object","name":"Line","id":"6359361d-9326-4e85-8774-74ec27434618","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"index"},"y":{"type":"field","field":"0"},"line_color":"#0072B5","line_width":3}},"nonselection_glyph":{"type":"object","name":"Line","id":"2cf2e8bd-4a60-4053-a6ee-052f24750766","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"index"},"y":{"type":"field","field":"0"},"line_color":"#0072B5","line_alpha":0.1,"line_width":3}},"muted_glyph":{"type":"object","name":"Line","id":"e306333d-b7bc-4040-846c-6b685ba9f3d1","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"index"},"y":{"type":"field","field":"0"},"line_color":"#0072B5","line_alpha":0.2,"line_width":3}}}},{"type":"object","name":"GlyphRenderer","id":"046094dc-143c-4359-87e8-21afe18462f7","attributes":{"name":"100 < TSS < 500","data_source":{"type":"object","name":"ColumnDataSource","id":"d2a16f87-8566-423d-8733-9763472098b2","attributes":{"selected":{"type":"object","name":"Selection","id":"d9a59bda-e98e-4be2-98b0-fdc7eba57d38","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"59d6e7b1-5a3d-4e5d-a6ff-13527629bd03"},"data":{"type":"map","entries":[["index",["Rrs_350","Rrs_351","Rrs_352","Rrs_353","Rrs_354","Rrs_355","Rrs_356","Rrs_357","Rrs_358","Rrs_359","Rrs_360","Rrs_361","Rrs_362","Rrs_363","Rrs_364","Rrs_365","Rrs_366","Rrs_367","Rrs_368","Rrs_369","Rrs_370","Rrs_371","Rrs_372","Rrs_373","Rrs_374","Rrs_375","Rrs_376","Rrs_377","Rrs_378","Rrs_379","Rrs_380","Rrs_381","Rrs_382","Rrs_383","Rrs_384","Rrs_385","Rrs_386","Rrs_387","Rrs_388","Rrs_389","Rrs_390","Rrs_391","Rrs_392","Rrs_393","Rrs_394","Rrs_395","Rrs_396","Rrs_397","Rrs_398","Rrs_399","Rrs_400","Rrs_401","Rrs_402","Rrs_403","Rrs_404","Rrs_405","Rrs_406","Rrs_407","Rrs_408","Rrs_409","Rrs_410","Rrs_411","Rrs_412","Rrs_413","Rrs_414","Rrs_415","Rrs_416","Rrs_417","Rrs_418","Rrs_419","Rrs_420","Rrs_421","Rrs_422","Rrs_423","Rrs_424","Rrs_425","Rrs_426","Rrs_427","Rrs_428","Rrs_429","Rrs_430","Rrs_431","Rrs_432","Rrs_433","Rrs_434","Rrs_435","Rrs_436","Rrs_437","Rrs_438","Rrs_439","Rrs_440","Rrs_441","Rrs_442","Rrs_443","Rrs_444","Rrs_445","Rrs_446","Rrs_447","Rrs_448","Rrs_449","Rrs_450","Rrs_451","Rrs_452","Rrs_453","Rrs_454","Rrs_455","Rrs_456","Rrs_457","Rrs_458","Rrs_459","Rrs_460","Rrs_461","Rrs_462","Rrs_463","Rrs_464","Rrs_465","Rrs_466","Rrs_467","Rrs_468","Rrs_469","Rrs_470","Rrs_471","Rrs_472","Rrs_473","Rrs_474","Rrs_475","Rrs_476","Rrs_477","Rrs_478","Rrs_479","Rrs_480","Rrs_481","Rrs_482","Rrs_483","Rrs_484","Rrs_485","Rrs_486","Rrs_487","Rrs_488","Rrs_489","Rrs_490","Rrs_491","Rrs_492","Rrs_493","Rrs_494","Rrs_495","Rrs_496","Rrs_497","Rrs_498","Rrs_499","Rrs_500","Rrs_501","Rrs_502","Rrs_503","Rrs_504","Rrs_505","Rrs_506","Rrs_507","Rrs_508","Rrs_509","Rrs_510","Rrs_511","Rrs_512","Rrs_513","Rrs_514","Rrs_515","Rrs_516","Rrs_517","Rrs_518","Rrs_519","Rrs_520","Rrs_521","Rrs_522","Rrs_523","Rrs_524","Rrs_525","Rrs_526","Rrs_527","Rrs_528","Rrs_529","Rrs_530","Rrs_531","Rrs_532","Rrs_533","Rrs_534","Rrs_535","Rrs_536","Rrs_537","Rrs_538","Rrs_539","Rrs_540","Rrs_541","Rrs_542","Rrs_543","Rrs_544","Rrs_545","Rrs_546","Rrs_547","Rrs_548","Rrs_549","Rrs_550","Rrs_551","Rrs_552","Rrs_553","Rrs_554","Rrs_555","Rrs_556","Rrs_557","Rrs_558","Rrs_559","Rrs_560","Rrs_561","Rrs_562","Rrs_563","Rrs_564","Rrs_565","Rrs_566","Rrs_567","Rrs_568","Rrs_569","Rrs_570","Rrs_571","Rrs_572","Rrs_573","Rrs_574","Rrs_575","Rrs_576","Rrs_577","Rrs_578","Rrs_579","Rrs_580","Rrs_581","Rrs_582","Rrs_583","Rrs_584","Rrs_585","Rrs_586","Rrs_587","Rrs_588","Rrs_589","Rrs_590","Rrs_591","Rrs_592","Rrs_593","Rrs_594","Rrs_595","Rrs_596","Rrs_597","Rrs_598","Rrs_599","Rrs_600","Rrs_601","Rrs_602","Rrs_603","Rrs_604","Rrs_605","Rrs_606","Rrs_607","Rrs_608","Rrs_609","Rrs_610","Rrs_611","Rrs_612","Rrs_613","Rrs_614","Rrs_615","Rrs_616","Rrs_617","Rrs_618","Rrs_619","Rrs_620","Rrs_621","Rrs_622","Rrs_623","Rrs_624","Rrs_625","Rrs_626","Rrs_627","Rrs_628","Rrs_629","Rrs_630","Rrs_631","Rrs_632","Rrs_633","Rrs_634","Rrs_635","Rrs_636","Rrs_637","Rrs_638","Rrs_639","Rrs_640","Rrs_641","Rrs_642","Rrs_643","Rrs_644","Rrs_645","Rrs_646","Rrs_647","Rrs_648","Rrs_649","Rrs_650","Rrs_651","Rrs_652","Rrs_653","Rrs_654","Rrs_655","Rrs_656","Rrs_657","Rrs_658","Rrs_659","Rrs_660","Rrs_661","Rrs_662","Rrs_663","Rrs_664","Rrs_665","Rrs_666","Rrs_667","Rrs_668","Rrs_669","Rrs_670","Rrs_671","Rrs_672","Rrs_673","Rrs_674","Rrs_675","Rrs_676","Rrs_677","Rrs_678","Rrs_679","Rrs_680","Rrs_681","Rrs_682","Rrs_683","Rrs_684","Rrs_685","Rrs_686","Rrs_687","Rrs_688","Rrs_689","Rrs_690","Rrs_691","Rrs_692","Rrs_693","Rrs_694","Rrs_695","Rrs_696","Rrs_697","Rrs_698","Rrs_699","Rrs_700","Rrs_701","Rrs_702","Rrs_703","Rrs_704","Rrs_705","Rrs_706","Rrs_707","Rrs_708","Rrs_709","Rrs_710","Rrs_711","Rrs_712","Rrs_713","Rrs_714","Rrs_715","Rrs_716","Rrs_717","Rrs_718","Rrs_719","Rrs_720","Rrs_721","Rrs_722","Rrs_723","Rrs_724","Rrs_725","Rrs_726","Rrs_727","Rrs_728","Rrs_729","Rrs_730","Rrs_731","Rrs_732","Rrs_733","Rrs_734","Rrs_735","Rrs_736","Rrs_737","Rrs_738","Rrs_739","Rrs_740","Rrs_741","Rrs_742","Rrs_743","Rrs_744","Rrs_745","Rrs_746","Rrs_747","Rrs_748","Rrs_749","Rrs_750","Rrs_751","Rrs_752","Rrs_753","Rrs_754","Rrs_755","Rrs_756","Rrs_757","Rrs_758","Rrs_759","Rrs_760","Rrs_761","Rrs_762","Rrs_763","Rrs_764","Rrs_765","Rrs_766","Rrs_767","Rrs_768","Rrs_769","Rrs_770","Rrs_771","Rrs_772","Rrs_773","Rrs_774","Rrs_775","Rrs_776","Rrs_777","Rrs_778","Rrs_779","Rrs_780","Rrs_781","Rrs_782","Rrs_783","Rrs_784","Rrs_785","Rrs_786","Rrs_787","Rrs_788","Rrs_789","Rrs_790","Rrs_791","Rrs_792","Rrs_793","Rrs_794","Rrs_795","Rrs_796","Rrs_797","Rrs_798","Rrs_799","Rrs_800","Rrs_801","Rrs_802","Rrs_803","Rrs_804","Rrs_805","Rrs_806","Rrs_807","Rrs_808","Rrs_809","Rrs_810","Rrs_811","Rrs_812","Rrs_813","Rrs_814","Rrs_815","Rrs_816","Rrs_817","Rrs_818","Rrs_819","Rrs_820","Rrs_821","Rrs_822","Rrs_823","Rrs_824","Rrs_825","Rrs_826","Rrs_827","Rrs_828","Rrs_829","Rrs_830","Rrs_831","Rrs_832","Rrs_833","Rrs_834","Rrs_835","Rrs_836","Rrs_837","Rrs_838","Rrs_839","Rrs_840","Rrs_841","Rrs_842","Rrs_843","Rrs_844","Rrs_845","Rrs_846","Rrs_847","Rrs_848","Rrs_849","Rrs_850","Rrs_851","Rrs_852","Rrs_853","Rrs_854","Rrs_855","Rrs_856","Rrs_857","Rrs_858","Rrs_859","Rrs_860","Rrs_861","Rrs_862","Rrs_863","Rrs_864","Rrs_865","Rrs_866","Rrs_867","Rrs_868","Rrs_869","Rrs_870","Rrs_871","Rrs_872","Rrs_873","Rrs_874","Rrs_875","Rrs_876","Rrs_877","Rrs_878","Rrs_879","Rrs_880","Rrs_881","Rrs_882","Rrs_883","Rrs_884","Rrs_885","Rrs_886","Rrs_887","Rrs_888","Rrs_889","Rrs_890","Rrs_891","Rrs_892","Rrs_893","Rrs_894","Rrs_895","Rrs_896","Rrs_897","Rrs_898","Rrs_899","Rrs_900"]],["0",{"type":"ndarray","array":{"type":"bytes","data":"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"},"shape":[551],"dtype":"float64","order":"little"}],["A_0",{"type":"ndarray","array":{"type":"bytes","data":"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"},"shape":[551],"dtype":"float64","order":"little"}]]}}},"view":{"type":"object","name":"CDSView","id":"585f83f6-4b46-4887-8be0-0822fda8f2a7","attributes":{"filter":{"type":"object","name":"AllIndices","id":"c686ac3a-7863-4a98-96fe-957101bedb38"}}},"glyph":{"type":"object","name":"Line","id":"f641dee2-ace1-4954-9798-d40fe9ddf30a","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"index"},"y":{"type":"field","field":"0"},"line_color":"#B54300","line_width":2}},"selection_glyph":{"type":"object","name":"Line","id":"d2a193ee-6ed2-451c-85c0-72bdb078936d","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"index"},"y":{"type":"field","field":"0"},"line_color":"#B54300","line_width":2}},"nonselection_glyph":{"type":"object","name":"Line","id":"a0776cf7-e910-4271-a7af-057bed1b271d","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"index"},"y":{"type":"field","field":"0"},"line_color":"#B54300","line_alpha":0.1,"line_width":2}},"muted_glyph":{"type":"object","name":"Line","id":"093f157b-f974-4396-817b-e08039b68da6","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"index"},"y":{"type":"field","field":"0"},"line_color":"#B54300","line_alpha":0.2,"line_width":2}}}},{"type":"object","name":"GlyphRenderer","id":"8c235ef6-f6cf-4fcd-a4f4-19e51730f268","attributes":{"name":"TSS < 100","data_source":{"type":"object","name":"ColumnDataSource","id":"d0fe9efd-8e21-4f4a-af10-3177e5a48a05","attributes":{"selected":{"type":"object","name":"Selection","id":"512b9d4a-a7fe-4378-9421-7c257ddc8374","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"bd636edd-5d95-4fff-8ad9-cd59114eaa5c"},"data":{"type":"map","entries":[["index",["Rrs_350","Rrs_351","Rrs_352","Rrs_353","Rrs_354","Rrs_355","Rrs_356","Rrs_357","Rrs_358","Rrs_359","Rrs_360","Rrs_361","Rrs_362","Rrs_363","Rrs_364","Rrs_365","Rrs_366","Rrs_367","Rrs_368","Rrs_369","Rrs_370","Rrs_371","Rrs_372","Rrs_373","Rrs_374","Rrs_375","Rrs_376","Rrs_377","Rrs_378","Rrs_379","Rrs_380","Rrs_381","Rrs_382","Rrs_383","Rrs_384","Rrs_385","Rrs_386","Rrs_387","Rrs_388","Rrs_389","Rrs_390","Rrs_391","Rrs_392","Rrs_393","Rrs_394","Rrs_395","Rrs_396","Rrs_397","Rrs_398","Rrs_399","Rrs_400","Rrs_401","Rrs_402","Rrs_403","Rrs_404","Rrs_405","Rrs_406","Rrs_407","Rrs_408","Rrs_409","Rrs_410","Rrs_411","Rrs_412","Rrs_413","Rrs_414","Rrs_415","Rrs_416","Rrs_417","Rrs_418","Rrs_419","Rrs_420","Rrs_421","Rrs_422","Rrs_423","Rrs_424","Rrs_425","Rrs_426","Rrs_427","Rrs_428","Rrs_429","Rrs_430","Rrs_431","Rrs_432","Rrs_433","Rrs_434","Rrs_435","Rrs_436","Rrs_437","Rrs_438","Rrs_439","Rrs_440","Rrs_441","Rrs_442","Rrs_443","Rrs_444","Rrs_445","Rrs_446","Rrs_447","Rrs_448","Rrs_449","Rrs_450","Rrs_451","Rrs_452","Rrs_453","Rrs_454","Rrs_455","Rrs_456","Rrs_457","Rrs_458","Rrs_459","Rrs_460","Rrs_461","Rrs_462","Rrs_463","Rrs_464","Rrs_465","Rrs_466","Rrs_467","Rrs_468","Rrs_469","Rrs_470","Rrs_471","Rrs_472","Rrs_473","Rrs_474","Rrs_475","Rrs_476","Rrs_477","Rrs_478","Rrs_479","Rrs_480","Rrs_481","Rrs_482","Rrs_483","Rrs_484","Rrs_485","Rrs_486","Rrs_487","Rrs_488","Rrs_489","Rrs_490","Rrs_491","Rrs_492","Rrs_493","Rrs_494","Rrs_495","Rrs_496","Rrs_497","Rrs_498","Rrs_499","Rrs_500","Rrs_501","Rrs_502","Rrs_503","Rrs_504","Rrs_505","Rrs_506","Rrs_507","Rrs_508","Rrs_509","Rrs_510","Rrs_511","Rrs_512","Rrs_513","Rrs_514","Rrs_515","Rrs_516","Rrs_517","Rrs_518","Rrs_519","Rrs_520","Rrs_521","Rrs_522","Rrs_523","Rrs_524","Rrs_525","Rrs_526","Rrs_527","Rrs_528","Rrs_529","Rrs_530","Rrs_531","Rrs_532","Rrs_533","Rrs_534","Rrs_535","Rrs_536","Rrs_537","Rrs_538","Rrs_539","Rrs_540","Rrs_541","Rrs_542","Rrs_543","Rrs_544","Rrs_545","Rrs_546","Rrs_547","Rrs_548","Rrs_549","Rrs_550","Rrs_551","Rrs_552","Rrs_553","Rrs_554","Rrs_555","Rrs_556","Rrs_557","Rrs_558","Rrs_559","Rrs_560","Rrs_561","Rrs_562","Rrs_563","Rrs_564","Rrs_565","Rrs_566","Rrs_567","Rrs_568","Rrs_569","Rrs_570","Rrs_571","Rrs_572","Rrs_573","Rrs_574","Rrs_575","Rrs_576","Rrs_577","Rrs_578","Rrs_579","Rrs_580","Rrs_581","Rrs_582","Rrs_583","Rrs_584","Rrs_585","Rrs_586","Rrs_587","Rrs_588","Rrs_589","Rrs_590","Rrs_591","Rrs_592","Rrs_593","Rrs_594","Rrs_595","Rrs_596","Rrs_597","Rrs_598","Rrs_599","Rrs_600","Rrs_601","Rrs_602","Rrs_603","Rrs_604","Rrs_605","Rrs_606","Rrs_607","Rrs_608","Rrs_609","Rrs_610","Rrs_611","Rrs_612","Rrs_613","Rrs_614","Rrs_615","Rrs_616","Rrs_617","Rrs_618","Rrs_619","Rrs_620","Rrs_621","Rrs_622","Rrs_623","Rrs_624","Rrs_625","Rrs_626","Rrs_627","Rrs_628","Rrs_629","Rrs_630","Rrs_631","Rrs_632","Rrs_633","Rrs_634","Rrs_635","Rrs_636","Rrs_637","Rrs_638","Rrs_639","Rrs_640","Rrs_641","Rrs_642","Rrs_643","Rrs_644","Rrs_645","Rrs_646","Rrs_647","Rrs_648","Rrs_649","Rrs_650","Rrs_651","Rrs_652","Rrs_653","Rrs_654","Rrs_655","Rrs_656","Rrs_657","Rrs_658","Rrs_659","Rrs_660","Rrs_661","Rrs_662","Rrs_663","Rrs_664","Rrs_665","Rrs_666","Rrs_667","Rrs_668","Rrs_669","Rrs_670","Rrs_671","Rrs_672","Rrs_673","Rrs_674","Rrs_675","Rrs_676","Rrs_677","Rrs_678","Rrs_679","Rrs_680","Rrs_681","Rrs_682","Rrs_683","Rrs_684","Rrs_685","Rrs_686","Rrs_687","Rrs_688","Rrs_689","Rrs_690","Rrs_691","Rrs_692","Rrs_693","Rrs_694","Rrs_695","Rrs_696","Rrs_697","Rrs_698","Rrs_699","Rrs_700","Rrs_701","Rrs_702","Rrs_703","Rrs_704","Rrs_705","Rrs_706","Rrs_707","Rrs_708","Rrs_709","Rrs_710","Rrs_711","Rrs_712","Rrs_713","Rrs_714","Rrs_715","Rrs_716","Rrs_717","Rrs_718","Rrs_719","Rrs_720","Rrs_721","Rrs_722","Rrs_723","Rrs_724","Rrs_725","Rrs_726","Rrs_727","Rrs_728","Rrs_729","Rrs_730","Rrs_731","Rrs_732","Rrs_733","Rrs_734","Rrs_735","Rrs_736","Rrs_737","Rrs_738","Rrs_739","Rrs_740","Rrs_741","Rrs_742","Rrs_743","Rrs_744","Rrs_745","Rrs_746","Rrs_747","Rrs_748","Rrs_749","Rrs_750","Rrs_751","Rrs_752","Rrs_753","Rrs_754","Rrs_755","Rrs_756","Rrs_757","Rrs_758","Rrs_759","Rrs_760","Rrs_761","Rrs_762","Rrs_763","Rrs_764","Rrs_765","Rrs_766","Rrs_767","Rrs_768","Rrs_769","Rrs_770","Rrs_771","Rrs_772","Rrs_773","Rrs_774","Rrs_775","Rrs_776","Rrs_777","Rrs_778","Rrs_779","Rrs_780","Rrs_781","Rrs_782","Rrs_783","Rrs_784","Rrs_785","Rrs_786","Rrs_787","Rrs_788","Rrs_789","Rrs_790","Rrs_791","Rrs_792","Rrs_793","Rrs_794","Rrs_795","Rrs_796","Rrs_797","Rrs_798","Rrs_799","Rrs_800","Rrs_801","Rrs_802","Rrs_803","Rrs_804","Rrs_805","Rrs_806","Rrs_807","Rrs_808","Rrs_809","Rrs_810","Rrs_811","Rrs_812","Rrs_813","Rrs_814","Rrs_815","Rrs_816","Rrs_817","Rrs_818","Rrs_819","Rrs_820","Rrs_821","Rrs_822","Rrs_823","Rrs_824","Rrs_825","Rrs_826","Rrs_827","Rrs_828","Rrs_829","Rrs_830","Rrs_831","Rrs_832","Rrs_833","Rrs_834","Rrs_835","Rrs_836","Rrs_837","Rrs_838","Rrs_839","Rrs_840","Rrs_841","Rrs_842","Rrs_843","Rrs_844","Rrs_845","Rrs_846","Rrs_847","Rrs_848","Rrs_849","Rrs_850","Rrs_851","Rrs_852","Rrs_853","Rrs_854","Rrs_855","Rrs_856","Rrs_857","Rrs_858","Rrs_859","Rrs_860","Rrs_861","Rrs_862","Rrs_863","Rrs_864","Rrs_865","Rrs_866","Rrs_867","Rrs_868","Rrs_869","Rrs_870","Rrs_871","Rrs_872","Rrs_873","Rrs_874","Rrs_875","Rrs_876","Rrs_877","Rrs_878","Rrs_879","Rrs_880","Rrs_881","Rrs_882","Rrs_883","Rrs_884","Rrs_885","Rrs_886","Rrs_887","Rrs_888","Rrs_889","Rrs_890","Rrs_891","Rrs_892","Rrs_893","Rrs_894","Rrs_895","Rrs_896","Rrs_897","Rrs_898","Rrs_899","Rrs_900"]],["0",{"type":"ndarray","array":{"type":"bytes","data":"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"},"shape":[551],"dtype":"float64","order":"little"}],["A_0",{"type":"ndarray","array":{"type":"bytes","data":"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"},"shape":[551],"dtype":"float64","order":"little"}]]}}},"view":{"type":"object","name":"CDSView","id":"7a08c20a-e9e3-4299-b0c5-0773e25c117b","attributes":{"filter":{"type":"object","name":"AllIndices","id":"f4bf9c01-a668-4cf9-a408-13a64bde1b17"}}},"glyph":{"type":"object","name":"Line","id":"25897cab-b0d0-4656-8ee1-219bc30e0e96","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"index"},"y":{"type":"field","field":"0"},"line_color":"#50C878","line_width":2}},"selection_glyph":{"type":"object","name":"Line","id":"0540a218-64f3-45ac-aaef-5aa2a7b10e66","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"index"},"y":{"type":"field","field":"0"},"line_color":"#50C878","line_width":2}},"nonselection_glyph":{"type":"object","name":"Line","id":"b3af18c3-2e62-43de-bfc5-e3a1d24a06ee","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"index"},"y":{"type":"field","field":"0"},"line_color":"#50C878","line_alpha":0.1,"line_width":2}},"muted_glyph":{"type":"object","name":"Line","id":"e29eb921-ef3c-4ec8-ba1c-229c5437a9c2","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"index"},"y":{"type":"field","field":"0"},"line_color":"#50C878","line_alpha":0.2,"line_width":2}}}}],"toolbar":{"type":"object","name":"Toolbar","id":"5b03ef1a-be21-403d-b519-599cd5695ee1","attributes":{"tools":[{"type":"object","name":"WheelZoomTool","id":"677b7b5b-b94a-4fa9-8f8a-53612a040dab","attributes":{"tags":["hv_created"],"renderers":"auto","zoom_together":"none"}},{"type":"object","name":"HoverTool","id":"7d579ddf-9616-48ff-a7da-039cd8f38efd","attributes":{"tags":["hv_created"],"renderers":[{"id":"711be962-cc32-4842-ba78-a38e52c69549"},{"id":"046094dc-143c-4359-87e8-21afe18462f7"},{"id":"8c235ef6-f6cf-4fcd-a4f4-19e51730f268"}],"tooltips":[["index","@{index}"],["0","@{A_0}"]]}},{"type":"object","name":"SaveTool","id":"c1857365-62dc-4541-ad61-c812793396b8"},{"type":"object","name":"PanTool","id":"601d2d90-4dd1-4b8a-8187-0384a0371195"},{"type":"object","name":"BoxZoomTool","id":"ec2ab02f-51f3-4120-b6ac-c7c1d236a062","attributes":{"overlay":{"type":"object","name":"BoxAnnotation","id":"995426e5-32fc-49d5-826a-f276cc53e67b","attributes":{"syncable":false,"line_color":"black","line_alpha":1.0,"line_width":2,"line_dash":[4,4],"fill_color":"lightgrey","fill_alpha":0.5,"level":"overlay","visible":false,"left":{"type":"number","value":"nan"},"right":{"type":"number","value":"nan"},"top":{"type":"number","value":"nan"},"bottom":{"type":"number","value":"nan"},"left_units":"canvas","right_units":"canvas","top_units":"canvas","bottom_units":"canvas","handles":{"type":"object","name":"BoxInteractionHandles","id":"50249055-8f87-4085-8e18-919be747fc82","attributes":{"all":{"type":"object","name":"AreaVisuals","id":"d8875163-4c22-435d-923f-421ad7e78bf8","attributes":{"fill_color":"white","hover_fill_color":"lightgray"}}}}}}}},{"type":"object","name":"ResetTool","id":"ab415ece-9c74-4b2b-bf58-09e737401f98"}],"active_drag":{"id":"601d2d90-4dd1-4b8a-8187-0384a0371195"},"active_scroll":{"id":"677b7b5b-b94a-4fa9-8f8a-53612a040dab"}}},"left":[{"type":"object","name":"LinearAxis","id":"438b79eb-c2e6-4209-ae85-7864191eaa3f","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"8c57d13b-1c6b-4c2f-8d83-b7c98af7f596","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"4c052ab3-ff67-47cc-9d90-c8c67f86a153"},"axis_label":"","axis_label_standoff":10,"axis_label_text_font":"Roboto, sans-serif, Verdana","axis_label_text_font_size":"1.25em","axis_label_text_font_style":"normal","major_label_policy":{"type":"object","name":"AllLabels","id":"d17c4683-142c-4db7-a1aa-6c97126ea517"},"major_label_text_font":"Roboto, sans-serif, Verdana","major_label_text_font_size":"1.025em"}}],"below":[{"type":"object","name":"CategoricalAxis","id":"5d99701e-5e45-4cbe-9b15-2391c4d205a8","attributes":{"ticker":{"type":"object","name":"CategoricalTicker","id":"6a2ea60c-b04f-42d2-9f64-2964dcbc061c"},"formatter":{"type":"object","name":"CategoricalTickFormatter","id":"c48dec17-14c4-42eb-919b-2804fc0aae11"},"axis_label":"","axis_label_standoff":10,"axis_label_text_font":"Roboto, sans-serif, Verdana","axis_label_text_font_size":"1.25em","axis_label_text_font_style":"normal","major_label_policy":{"type":"object","name":"AllLabels","id":"dd2a9c09-41c2-467e-b037-bb00969f5917"},"major_label_text_font":"Roboto, sans-serif, Verdana","major_label_text_font_size":"1.025em","group_text_font":"Roboto, sans-serif, Verdana","group_text_font_size":"1.025em"}}],"center":[{"type":"object","name":"Grid","id":"7f319f5a-8435-45da-950c-99f11d7c529b","attributes":{"axis":{"id":"5d99701e-5e45-4cbe-9b15-2391c4d205a8"},"grid_line_color":null}},{"type":"object","name":"Grid","id":"58fff8bf-0f72-49d6-bf3f-cb5ea8b1b092","attributes":{"dimension":1,"axis":{"id":"438b79eb-c2e6-4209-ae85-7864191eaa3f"},"grid_line_color":null}},{"type":"object","name":"Legend","id":"05586698-da9e-4aea-83a7-c9e247fe0970","attributes":{"click_policy":"mute","label_text_font":"Roboto, sans-serif, Verdana","label_text_font_size":"1.025em","label_standoff":8,"glyph_width":15,"spacing":8,"items":[{"type":"object","name":"LegendItem","id":"d019d315-a036-402b-abd1-b85f1654ce58","attributes":{"label":{"type":"value","value":"TSS > 500"},"renderers":[{"id":"711be962-cc32-4842-ba78-a38e52c69549"}]}},{"type":"object","name":"LegendItem","id":"4978140e-0bb4-449a-afe4-9469bf88490c","attributes":{"label":{"type":"value","value":"100 < TSS < 500"},"renderers":[{"id":"046094dc-143c-4359-87e8-21afe18462f7"}]}},{"type":"object","name":"LegendItem","id":"7394928d-7bd4-4899-886a-b564e9f0a021","attributes":{"label":{"type":"value","value":"TSS < 100"},"renderers":[{"id":"8c235ef6-f6cf-4fcd-a4f4-19e51730f268"}]}}]}}],"min_border_top":10,"min_border_bottom":10,"min_border_left":10,"min_border_right":10,"output_backend":"webgl"}},{"type":"object","name":"Spacer","id":"e1c705bc-2535-4b21-ab56-1bad72adf742","attributes":{"name":"HSpacer01097","stylesheets":["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #c3c3c3;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}",{"id":"128e38eb-d34e-4e05-b55d-d115b88f104b"},{"id":"3117f01e-7330-4f9b-9fcd-ca2d692269c4"},{"id":"72428f5a-bbbb-49f4-8f36-7ac60ab305f4"},{"id":"7a82775f-5d37-4e3d-bb00-f1c6c23ad67b"},{"id":"875a1921-87a4-4b6d-a052-fdda9a80f30e"}],"margin":0,"sizing_mode":"stretch_width","align":"start"}}]}}],"defs":[{"type":"model","name":"ReactiveHTML1"},{"type":"model","name":"FlexBox1","properties":[{"name":"align_content","kind":"Any","default":"flex-start"},{"name":"align_items","kind":"Any","default":"flex-start"},{"name":"flex_direction","kind":"Any","default":"row"},{"name":"flex_wrap","kind":"Any","default":"wrap"},{"name":"gap","kind":"Any","default":""},{"name":"justify_content","kind":"Any","default":"flex-start"}]},{"type":"model","name":"FloatPanel1","properties":[{"name":"config","kind":"Any","default":{"type":"map"}},{"name":"contained","kind":"Any","default":true},{"name":"position","kind":"Any","default":"right-top"},{"name":"offsetx","kind":"Any","default":null},{"name":"offsety","kind":"Any","default":null},{"name":"theme","kind":"Any","default":"primary"},{"name":"status","kind":"Any","default":"normalized"}]},{"type":"model","name":"GridStack1","properties":[{"name":"mode","kind":"Any","default":"warn"},{"name":"ncols","kind":"Any","default":null},{"name":"nrows","kind":"Any","default":null},{"name":"allow_resize","kind":"Any","default":true},{"name":"allow_drag","kind":"Any","default":true},{"name":"state","kind":"Any","default":[]}]},{"type":"model","name":"drag1","properties":[{"name":"slider_width","kind":"Any","default":5},{"name":"slider_color","kind":"Any","default":"black"},{"name":"value","kind":"Any","default":50}]},{"type":"model","name":"click1","properties":[{"name":"terminal_output","kind":"Any","default":""},{"name":"debug_name","kind":"Any","default":""},{"name":"clears","kind":"Any","default":0}]},{"type":"model","name":"FastWrapper1","properties":[{"name":"object","kind":"Any","default":null},{"name":"style","kind":"Any","default":null}]},{"type":"model","name":"NotificationAreaBase1","properties":[{"name":"js_events","kind":"Any","default":{"type":"map"}},{"name":"position","kind":"Any","default":"bottom-right"},{"name":"_clear","kind":"Any","default":0}]},{"type":"model","name":"NotificationArea1","properties":[{"name":"js_events","kind":"Any","default":{"type":"map"}},{"name":"notifications","kind":"Any","default":[]},{"name":"position","kind":"Any","default":"bottom-right"},{"name":"_clear","kind":"Any","default":0},{"name":"types","kind":"Any","default":[{"type":"map","entries":[["type","warning"],["background","#ffc107"],["icon",{"type":"map","entries":[["className","fas fa-exclamation-triangle"],["tagName","i"],["color","white"]]}]]},{"type":"map","entries":[["type","info"],["background","#007bff"],["icon",{"type":"map","entries":[["className","fas fa-info-circle"],["tagName","i"],["color","white"]]}]]}]}]},{"type":"model","name":"Notification","properties":[{"name":"background","kind":"Any","default":null},{"name":"duration","kind":"Any","default":3000},{"name":"icon","kind":"Any","default":null},{"name":"message","kind":"Any","default":""},{"name":"notification_type","kind":"Any","default":null},{"name":"_destroyed","kind":"Any","default":false}]},{"type":"model","name":"TemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"BootstrapTemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"TemplateEditor1","properties":[{"name":"layout","kind":"Any","default":[]}]},{"type":"model","name":"MaterialTemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"ReactiveESM1"},{"type":"model","name":"JSComponent1"},{"type":"model","name":"ReactComponent1"},{"type":"model","name":"AnyWidgetComponent1"},{"type":"model","name":"request_value1","properties":[{"name":"fill","kind":"Any","default":"none"},{"name":"_synced","kind":"Any","default":null},{"name":"_request_sync","kind":"Any","default":0}]}]}};
+  var render_items = [{"docid":"0549fce8-4fd1-4e4f-8d56-0aad0e8cc7e7","roots":{"49501848-6f54-4fea-b852-6566749b29cf":"b7167293-95c2-4fbb-809c-2395851ae39a"},"root_ids":["49501848-6f54-4fea-b852-6566749b29cf"]}];
+  var docs = Object.values(docs_json)
+  if (!docs) {
+    return
+  }
+  const py_version = docs[0].version.replace('rc', '-rc.').replace('.dev', '-dev.')
+  async function embed_document(root) {
+    var Bokeh = get_bokeh(root)
+    await Bokeh.embed.embed_items_notebook(docs_json, render_items);
+    for (const render_item of render_items) {
+      for (const root_id of render_item.root_ids) {
+	const id_el = document.getElementById(root_id)
+	if (id_el.children.length && id_el.children[0].hasAttribute('data-root-id')) {
+	  const root_el = id_el.children[0]
+	  root_el.id = root_el.id + '-rendered'
+	  for (const child of root_el.children) {
+            // Ensure JupyterLab does not capture keyboard shortcuts
+            // see: https://jupyterlab.readthedocs.io/en/4.1.x/extension/notebook.html#keyboard-interaction-model
+	    child.setAttribute('data-lm-suppress-shortcuts', 'true')
+	  }
+	}
+      }
+    }
+  }
+  function get_bokeh(root) {
+    if (root.Bokeh === undefined) {
+      return null
+    } else if (root.Bokeh.version !== py_version) {
+      if (root.Bokeh.versions === undefined || !root.Bokeh.versions.has(py_version)) {
+	return null
+      }
+      return root.Bokeh.versions.get(py_version);
+    } else if (root.Bokeh.version === py_version) {
+      return root.Bokeh
+    }
+    return null
+  }
+  function is_loaded(root) {
+    var Bokeh = get_bokeh(root)
+    return (Bokeh != null && Bokeh.Panel !== undefined)
+  }
+  if (is_loaded(root)) {
+    embed_document(root);
+  } else {
+    var attempts = 0;
+    var timer = setInterval(function(root) {
+      if (is_loaded(root)) {
+        clearInterval(timer);
+        embed_document(root);
+      } else if (document.readyState == "complete") {
+        attempts++;
+        if (attempts > 200) {
+          clearInterval(timer);
+	  var Bokeh = get_bokeh(root)
+	  if (Bokeh == null || Bokeh.Panel == null) {
+            console.warn("Panel: ERROR: Unable to run Panel code because Bokeh or Panel library is missing");
+	  } else {
+	    console.warn("Panel: WARNING: Attempting to render but not all required libraries could be resolved.")
+	    embed_document(root)
+	  }
+        }
+      }
+    }, 25, root)
+  }
+})(window);</script></div></div>
+</div>
+<p>Great! Now, let’s explore how different values for window and sigma affect the plot. Instead of reevaluating the above cell multiple times, let’s use Panel to add interactive controls and quickly visualize the impact of different parameter values.</p>
+</section>
+<section id="exploring-the-parameter-space">
+<h2>Exploring the Parameter Space<a class="headerlink" href="#exploring-the-parameter-space" title="Link to this heading">#</a></h2>
+<p>Let’s create some Panel slider widgets to explore the range of parameter values:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variable_widget</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;TSS&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;TSS&#39;</span><span class="p">])</span>
+<span class="n">high_widget</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">IntSlider</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;high&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">1200</span><span class="p">)</span>
+<span class="n">middle_widget</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">IntSlider</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;middle&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, let’s link these widgets to our plotting function so that updates to the widgets rerun the function. We can achieve this easily in Panel using pn.bind:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bound_plot</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span>
+    <span class="n">get_plot</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="n">variable_widget</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">high_widget</span><span class="p">,</span> <span class="n">middle</span><span class="o">=</span><span class="n">middle_widget</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Once we’ve bound the widgets to the function’s arguments, we can layout the resulting bound_plot component along with the widgets using a Panel layout such as Column:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">widgets</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">variable_widget</span><span class="p">,</span> <span class="n">high_widget</span><span class="p">,</span> <span class="n">middle_widget</span><span class="p">,</span> <span class="n">sizing_mode</span><span class="o">=</span><span class="s2">&quot;fixed&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">pn</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">widgets</span><span class="p">,</span> <span class="n">bound_plot</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "843d5f22a5c34eed9b78ffde153f753d", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<p>As long as you have a live Python process running, dragging these widgets will trigger a call to the get_plot callback function, evaluating it for whatever combination of parameter values you select and displaying the results.</p>
+</section>
+<section id="optional-serving-the-notebook">
+<h2>Optional - Serving the Notebook<a class="headerlink" href="#optional-serving-the-notebook" title="Link to this heading">#</a></h2>
+<p>You may be interested in serving the notebook. In such a case, uncomment the next  chunk of code and run it. Then, write the code to serve the notebook.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Uncomment if needed</span>
+<span class="c1">#pn.template.MaterialTemplate(</span>
+<span class="c1">#   site=&quot;Panel&quot;,</span>
+<span class="c1">#  title=&quot;GLORIA App&quot;,</span>
+<span class="c1">#    sidebar=[variable_widget, high_widget, middle_widget],</span>
+<span class="c1">#    main=[bound_plot],</span>
+<span class="c1">#).servable(); # The ; is needed in the notebook to not display the template. Its not needed in a script</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Write the code based on # See https://panel.holoviz.org/tutorials/intermediate/serve.html</span>
+<span class="c1">#</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>That’s all. We have achieved our goal.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Welcome to PRA</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Panel_02A.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Visualizing hyperspectral signatures of agricultural crops</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#i-l-21-10-2024">I.L. 21.10.2024</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goal">Goal</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tools">Tools</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fetching-the-data">Fetching the data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gloria">GLORIA</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-the-metadata">Checking the metadata</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#total-suspended-solids-tss">Total Suspended Solids (TSS)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-a-subset-of-the-data">Visualizing a Subset of the Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exploring-the-parameter-space">Exploring the Parameter Space</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-serving-the-notebook">Optional - Serving the Notebook</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By IL
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
