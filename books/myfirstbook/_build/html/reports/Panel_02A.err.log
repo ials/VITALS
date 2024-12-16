@@ -24,9 +24,17 @@ import numpy as np
 import pandas as pd
 import panel as pn
 
-PRIMARY_COLOR = "#0072B5"
-SECONDARY_COLOR = "#B54300"
-TERCIARY_COLOR = "#50C878" 
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+colors = ["#61615A", "#BA0900", "#6B7900", "#00C2A0", "#FFAA92", "#FF90C9", "#B903AA"]
+COLOR1 = colors[0]
+COLOR2 = colors[1]
+COLOR3 = colors[2]
+COLOR4 = colors[3]
+COLOR5 = colors[4]
+COLOR6 = colors[5]
+COLOR7 = colors[6]
 ------------------
 
 
